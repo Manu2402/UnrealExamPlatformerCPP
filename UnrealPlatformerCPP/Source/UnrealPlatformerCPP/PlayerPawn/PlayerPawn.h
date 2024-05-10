@@ -3,7 +3,12 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
+#include "InputActionValue.h"
 #include "PlayerPawn.generated.h"
+
+// Forward declaration about UInputMappingContext.
+class UInputMappingContext;
+class UInputAction;
 
 UCLASS()
 class UNREALPLATFORMERCPP_API APlayerPawn : public APawn
@@ -12,8 +17,7 @@ class UNREALPLATFORMERCPP_API APlayerPawn : public APawn
 
 private:
 	const FRotator StartRotation = FRotator(0, 0, -90);
-	// Change CameraOffset (more tall).
-	const FVector CameraOffset = FVector(800, 0, 0);
+	const FVector CameraOffset = FVector(700, 0, -200);
 
 	USkeletalMeshComponent* SkeletalMeshComponent;
 	UCameraComponent* CameraComponent;
@@ -29,4 +33,12 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	UInputMappingContext* InputMappingContext;
+
+	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	UInputAction* TestAction;
+	
+	UFUNCTION()
+	void Test(const FInputActionValue& Value);
 };

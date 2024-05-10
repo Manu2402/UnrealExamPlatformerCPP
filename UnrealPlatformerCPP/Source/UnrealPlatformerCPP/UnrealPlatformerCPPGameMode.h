@@ -10,6 +10,10 @@ class UNREALPLATFORMERCPP_API AUnrealPlatformerCPPGameMode : public AGameModeBas
 {
 	GENERATED_BODY()
 
-	void SpawnPlayer();
-	
+private:
+	const FString DefaultPawnBPClassPath = TEXT("/Game/Custom/Blueprints/BP_PlayerPawn.BP_PlayerPawn_C");
+
+public:
+	AUnrealPlatformerCPPGameMode();
+
 };
