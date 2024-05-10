@@ -55,7 +55,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	if (Input)
 	{
-		Input->BindAction(TestAction, ETriggerEvent::Triggered, this, &APlayerPawn::Test);
+		Input->BindAction(InputActionsAssetData->TestAction, ETriggerEvent::Triggered, this, &APlayerPawn::Test);
 	}
 }
 

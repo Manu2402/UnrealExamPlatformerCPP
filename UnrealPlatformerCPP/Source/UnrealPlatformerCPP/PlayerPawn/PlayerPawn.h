@@ -4,6 +4,7 @@
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
 #include "InputActionValue.h"
+#include "../Utility/AssetsData/InputActionsAssetData.h"
 #include "PlayerPawn.generated.h"
 
 // Forward declaration about UInputMappingContext.
@@ -33,11 +34,11 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UInputMappingContext* InputMappingContext;
 
-	UPROPERTY(EditAnywhere, Category = "EnhancedInput")
-	UInputAction* TestAction;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
+	UInputActionsAssetData* InputActionsAssetData; // Database composed by input action assets.
 	
 	UFUNCTION()
 	void Test(const FInputActionValue& Value);
