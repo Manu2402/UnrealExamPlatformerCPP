@@ -5,6 +5,7 @@
 APlayerPawn::APlayerPawn()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	PlayerJumpForce = 100;
 
 	const FString SkeletalMeshPath("/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny");
 	const FString CameraText("Camera");
@@ -12,7 +13,7 @@ APlayerPawn::APlayerPawn()
 	SetActorRotation(StartRotation);
 
 	USkeletalMesh* SkeletalMesh = LoadObject<USkeletalMesh>(nullptr, *SkeletalMeshPath);
-	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Skeletal Mesh"));
+	SkeletalMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("SkeletalMeshComponent"));
 	if (SkeletalMeshComponent)
 	{
 		SkeletalMeshComponent->SetSkeletalMesh(SkeletalMesh);
@@ -24,6 +25,7 @@ APlayerPawn::APlayerPawn()
 		CameraComponent->SetWorldLocation(GetActorLocation() - CameraOffset);
 	}
 
+	PlayerMovementComponent = CreateDefaultSubobject<UPlayerMovementComponent>(TEXT("PlayerMovementComponent"));
 }
 
 void APlayerPawn::BeginPlay()
@@ -55,12 +57,12 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 	if (Input)
 	{
-		Input->BindAction(InputActionsAssetData->TestAction, ETriggerEvent::Triggered, this, &APlayerPawn::Test);
+		Input->BindAction(InputActionsAssetData->TestAction, ETriggerEvent::Triggered, this, &APlayerPawn::PlayerJump);
 	}
 }
 
-void APlayerPawn::Test(const FInputActionValue& Value)
+void APlayerPawn::PlayerJump()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Green, TEXT("Test"));
+	PlayerMovementComponent->PlayerJump(PlayerJumpForce);
 }
 

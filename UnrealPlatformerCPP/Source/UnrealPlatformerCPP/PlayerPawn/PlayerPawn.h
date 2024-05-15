@@ -5,6 +5,7 @@
 #include "Camera/CameraComponent.h"
 #include "InputActionValue.h"
 #include "../Utility/AssetsData/InputActionsAssetData.h"
+#include "../PlayerMovementComponent/PlayerMovementComponent.h"
 #include "PlayerPawn.generated.h"
 
 // Forward declaration about UInputMappingContext.
@@ -20,9 +21,6 @@ private:
 	const FRotator StartRotation = FRotator(0, 0, -90);
 	const FVector CameraOffset = FVector(700, 0, -200);
 
-	USkeletalMeshComponent* SkeletalMeshComponent;
-	UCameraComponent* CameraComponent;
-
 public:
 	APlayerPawn();
 
@@ -34,12 +32,24 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float PlayerJumpForce = 100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	USkeletalMeshComponent* SkeletalMeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UCameraComponent* CameraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPlayerMovementComponent* PlayerMovementComponent;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UInputMappingContext* InputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UInputActionsAssetData* InputActionsAssetData; // Database composed by input action assets.
 	
-	UFUNCTION()
-	void Test(const FInputActionValue& Value);
+	UFUNCTION(BlueprintCallable)
+	void PlayerJump();
 };
