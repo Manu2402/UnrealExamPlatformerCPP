@@ -4,7 +4,6 @@
 #include "GameFramework/GameModeBase.h"
 #include "UnrealPlatformerCPPGameMode.generated.h"
 
-
 UCLASS()
 class UNREALPLATFORMERCPP_API AUnrealPlatformerCPPGameMode : public AGameModeBase
 {

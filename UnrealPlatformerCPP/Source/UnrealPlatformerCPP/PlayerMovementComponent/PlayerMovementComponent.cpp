@@ -1,8 +1,9 @@
 #include "PlayerMovementComponent.h"
+#include "EnhancedInputComponent.h"
 
 UPlayerMovementComponent::UPlayerMovementComponent()
 {
-	bIsGrounded = false;
+	PlayerJumpForce = 400;
 }
 
 void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -14,10 +15,34 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		Velocity += Gravity;
 	}
 
+	bIsGrounded = false;
+
+	FHitResult HitResult;
+
+	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
+	{
+		FVector Compenetration = GetPenetrationAdjustment(HitResult);
+		ResolvePenetration(Compenetration, HitResult, UpdatedComponent->GetComponentQuat());
+
+		if (HitResult.Normal.Z > 0)
+		{
+			bIsGrounded = true;
+		}
+	}
 }
 
-void UPlayerMovementComponent::PlayerJump(float& PlayerJumpForce)
+void UPlayerMovementComponent::PlayerJump()
 {
+	if (!bIsGrounded)
+	{
+		return;
+	}
+
 	Velocity = UpdatedComponent->GetUpVector() * PlayerJumpForce;
-	GEngine->AddOnScreenDebugMessage(-1, 2, FColor::Green, TEXT("Jump"));
+}
+
+void UPlayerMovementComponent::PlayerMove(const FInputActionValue& Input)
+{
+	const float Direction = Input.Get<float>();
+	Velocity += UpdatedComponent->GetRightVector() * Direction * MovementSpeed;
 }

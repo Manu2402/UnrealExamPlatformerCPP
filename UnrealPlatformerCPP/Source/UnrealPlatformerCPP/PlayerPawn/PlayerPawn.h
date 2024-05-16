@@ -4,7 +4,7 @@
 #include "GameFramework/Pawn.h"
 #include "Camera/CameraComponent.h"
 #include "InputActionValue.h"
-#include "../Utility/AssetsData/InputActionsAssetData.h"
+#include "../Utility/DataAssets/DataAsset_IA.h"
 #include "../PlayerMovementComponent/PlayerMovementComponent.h"
 #include "PlayerPawn.generated.h"
 
@@ -33,9 +33,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float PlayerJumpForce = 100;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* SkeletalMeshComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -48,8 +45,12 @@ public:
 	UInputMappingContext* InputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
-	UInputActionsAssetData* InputActionsAssetData; // Database composed by input action assets.
+	UDataAsset_IA* DataAsset_IA; // Database composed by input action assets.
 	
 	UFUNCTION(BlueprintCallable)
 	void PlayerJump();
+
+	UFUNCTION(BlueprintCallable)
+	void PlayerMove(const FInputActionValue& Input);
+
 };

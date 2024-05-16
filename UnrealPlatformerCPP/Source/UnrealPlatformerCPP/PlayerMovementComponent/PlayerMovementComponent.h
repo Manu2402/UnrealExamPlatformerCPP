@@ -11,13 +11,21 @@ class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementCompone
 	
 private:
 	const FVector Gravity = FVector(0, 0, -9.81f);
-
-	bool bIsGrounded;
+	bool bIsGrounded = false;
 	
 public:
 	UPlayerMovementComponent();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float PlayerJumpForce;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MovementSpeed;
+
 	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void PlayerJump(float& PlayerJumpForce);
+	void PlayerJump();
+
+	void PlayerMove(const struct FInputActionValue& Input);
+
 };
