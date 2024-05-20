@@ -12,6 +12,7 @@ class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementCompone
 private:
 	const FVector Gravity = FVector(0, 0, -9.81f);
 	bool bIsGrounded = false;
+	FHitResult HitResult;
 	
 public:
 	UPlayerMovementComponent();

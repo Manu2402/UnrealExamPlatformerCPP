@@ -5,7 +5,8 @@
 
 UPlayerMovementComponent::UPlayerMovementComponent()
 {
-	PlayerJumpForce = 400;
+	PlayerJumpForce = 600;
+	MovementSpeed = 400;
 }
 
 void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -17,9 +18,8 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		Velocity += Gravity;
 	}
 
-	bIsGrounded = false;
-
-	FHitResult HitResult;
+	// Check about isGrounded.
+	bIsGrounded = Velocity.Z == 0;
 
 	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
 	{
@@ -28,9 +28,13 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 		if (HitResult.Normal.Z > 0)
 		{
+			Velocity.Z = 0;
 			bIsGrounded = true;
 		}
 	}
+
+	Velocity.X = 0;
+	Velocity.Y = 0;
 }
 
 void UPlayerMovementComponent::PlayerJump()
