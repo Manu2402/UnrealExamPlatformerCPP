@@ -45,5 +45,4 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void PlayerMove(const FInputActionValue& Input);
-
 };

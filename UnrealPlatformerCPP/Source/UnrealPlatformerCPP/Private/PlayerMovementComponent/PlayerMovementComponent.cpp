@@ -13,24 +13,30 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	Owner = GetOwner();
+	World = Owner->GetWorld();
+
 	if (!bIsGrounded)
 	{
 		Velocity += Gravity;
 	}
+	else
+	{
+		Velocity.Z = 0;
+	}
 
-	// Check about isGrounded.
-	bIsGrounded = Velocity.Z == 0;
+	LineTraceParameters.StartLocation = Owner->GetActorLocation();
+	LineTraceParameters.Direction = FVector::DownVector;
+	LineTraceParameters.LineLength = DefaultLineLength;
+	FVector EndLocation = LineTraceParameters.StartLocation + LineTraceParameters.Direction * LineTraceParameters.LineLength;
+
+	bIsGrounded = World->LineTraceSingleByChannel(HitResult, LineTraceParameters.StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
+	DrawDebugLine(World, LineTraceParameters.StartLocation, EndLocation, FColor::Green);
 
 	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
 	{
 		FVector Compenetration = GetPenetrationAdjustment(HitResult);
 		ResolvePenetration(Compenetration, HitResult, UpdatedComponent->GetComponentQuat());
-
-		if (HitResult.Normal.Z > 0)
-		{
-			Velocity.Z = 0;
-			bIsGrounded = true;
-		}
 	}
 
 	Velocity.X = 0;
@@ -43,7 +49,8 @@ void UPlayerMovementComponent::PlayerJump()
 	{
 		return;
 	}
-
+	
+	//bIsGrounded = false;
 	Velocity = UpdatedComponent->GetUpVector() * PlayerJumpForce;
 }
 

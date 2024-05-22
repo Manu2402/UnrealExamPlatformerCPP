@@ -18,6 +18,10 @@ APlayerCharacter::APlayerCharacter()
 	PlayerMovementComponent = CreateDefaultSubobject<UPlayerMovementComponent>(TEXT("PlayerMovementComponent"));
 
 	CameraComponent->SetupAttachment(RootComponent);
+
+	// Set ABP.
+	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("/Game/Custom/Blueprints/ABP_PlayerCharacter.ABP_PlayerCharacter"));
+	GetMesh()->SetAnimInstanceClass(AnimBlueprint.Object->GeneratedClass);
 }
 
 void APlayerCharacter::BeginPlay()
@@ -63,4 +67,7 @@ void APlayerCharacter::PlayerMove(const FInputActionValue& Input)
 {
 	PlayerMovementComponent->PlayerMove(Input);
 }
+
+
+
 
