@@ -2,6 +2,8 @@
 #include "../Public/PlayerMovementComponent/PlayerMovementComponent.h"
 
 #include "EnhancedInputComponent.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Components/CapsuleComponent.h"
 
 UPlayerMovementComponent::UPlayerMovementComponent()
 {
@@ -13,7 +15,7 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	Owner = GetOwner();
+	Owner = Cast<ACharacter>(GetOwner());
 	if (!Owner)
 	{
 		return;
@@ -37,7 +39,7 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	SphereParams.SphereLocation = Owner->GetActorLocation() + DefaultSphereOffset;
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(Owner);
-	if(!World->SweepSingleByChannel(HitResult, SphereParams.SphereLocation, SphereParams.SphereLocation, FQuat::Identity, ECollisionChannel::ECC_Visibility, FCollisionShape::MakeSphere(DefaultSphereRadius), QueryParams))
+	if (!World->SweepSingleByChannel(HitResult, SphereParams.SphereLocation, SphereParams.SphereLocation, FQuat::Identity, ECollisionChannel::ECC_Visibility, FCollisionShape::MakeSphere(DefaultSphereRadius), QueryParams))
 	{
 		bIsGrounded = false;
 	}
@@ -65,12 +67,20 @@ void UPlayerMovementComponent::PlayerJump()
 	{
 		return;
 	}
-	
+
 	Velocity = UpdatedComponent->GetUpVector() * PlayerJumpForce;
 }
 
 void UPlayerMovementComponent::PlayerMove(const FInputActionValue& Input)
 {
 	const float Direction = Input.Get<float>();
+	CurrentSign = Direction > 0;
+
+	if (PreviousSign != CurrentSign)
+	{
+		Owner->GetMesh()->AddWorldRotation(FRotator(0, 180, 0));
+	}
+
 	Velocity += UpdatedComponent->GetRightVector() * Direction * MovementSpeed;
+	PreviousSign = CurrentSign;
 }

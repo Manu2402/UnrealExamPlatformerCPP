@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/MovementComponent.h"
+#include "GameFramework/Character.h"
 #include "PlayerMovementComponent.generated.h"
 
 USTRUCT(BlueprintType)
@@ -23,9 +24,13 @@ private:
 	const FVector DefaultSphereOffset = FVector(0, 0, -90);
 	const float DefaultSphereRadius = 20;
 
+	// Flip look at.
+	bool PreviousSign = true;
+	bool CurrentSign;
+
 	FHitResult HitResult;
 	FSphereParams SphereParams;
-	AActor* Owner;
+	ACharacter* Owner;
 	UWorld* World;
 	
 public:
@@ -45,5 +50,4 @@ public:
 	void PlayerJump();
 
 	void PlayerMove(const struct FInputActionValue& Input);
-
 };
