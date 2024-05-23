@@ -14,29 +14,45 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	Owner = GetOwner();
-	World = Owner->GetWorld();
+	if (!Owner)
+	{
+		return;
+	}
 
+	World = Owner->GetWorld();
+	if (!World)
+	{
+		return;
+	}
+
+	// Apply gravity.
 	if (!bIsGrounded)
 	{
 		Velocity += Gravity;
 	}
-	else
+	// If Velocity is 0 than character is grounded.
+	bIsGrounded = Velocity.Z == 0;
+
+	// Sphere to track if there are some collision under of character.
+	SphereParams.SphereLocation = Owner->GetActorLocation() + DefaultSphereOffset;
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(Owner);
+	if(!World->SweepSingleByChannel(HitResult, SphereParams.SphereLocation, SphereParams.SphereLocation, FQuat::Identity, ECollisionChannel::ECC_Visibility, FCollisionShape::MakeSphere(DefaultSphereRadius), QueryParams))
 	{
-		Velocity.Z = 0;
+		bIsGrounded = false;
 	}
-
-	LineTraceParameters.StartLocation = Owner->GetActorLocation();
-	LineTraceParameters.Direction = FVector::DownVector;
-	LineTraceParameters.LineLength = DefaultLineLength;
-	FVector EndLocation = LineTraceParameters.StartLocation + LineTraceParameters.Direction * LineTraceParameters.LineLength;
-
-	bIsGrounded = World->LineTraceSingleByChannel(HitResult, LineTraceParameters.StartLocation, EndLocation, ECollisionChannel::ECC_Visibility);
-	DrawDebugLine(World, LineTraceParameters.StartLocation, EndLocation, FColor::Green);
+	// DrawDebugSphere(World, SphereParams.SphereLocation, DefaultSphereRadius, 32, FColor::Green);
 
 	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
 	{
 		FVector Compenetration = GetPenetrationAdjustment(HitResult);
 		ResolvePenetration(Compenetration, HitResult, UpdatedComponent->GetComponentQuat());
+
+		if (HitResult.Normal.Z > 0)
+		{
+			Velocity.Z = 0;
+			bIsGrounded = true;
+		}
 	}
 
 	Velocity.X = 0;
@@ -50,7 +66,6 @@ void UPlayerMovementComponent::PlayerJump()
 		return;
 	}
 	
-	//bIsGrounded = false;
 	Velocity = UpdatedComponent->GetUpVector() * PlayerJumpForce;
 }
 

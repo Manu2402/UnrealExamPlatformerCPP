@@ -5,13 +5,12 @@
 #include "PlayerMovementComponent.generated.h"
 
 USTRUCT(BlueprintType)
-struct FLineTraceParameters
+struct FSphereParams
 {
 	GENERATED_BODY()
 
-	FVector StartLocation;
-	FVector Direction;
-	float LineLength;
+	FVector SphereLocation;
+	float SphereRadius;
 };
 
 UCLASS(BlueprintType, Blueprintable)
@@ -21,11 +20,12 @@ class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementCompone
 	
 private:
 	const FVector Gravity = FVector(0, 0, -9.81f);
-	const float DefaultLineLength = 100;
+	const FVector DefaultSphereOffset = FVector(0, 0, -90);
+	const float DefaultSphereRadius = 20;
 
-	AActor* Owner;
 	FHitResult HitResult;
-	FLineTraceParameters LineTraceParameters;
+	FSphereParams SphereParams;
+	AActor* Owner;
 	UWorld* World;
 	
 public:
@@ -39,8 +39,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	bool bIsGrounded = false;
-
-	void SetIsGrounded(const bool Value);
 
 	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
