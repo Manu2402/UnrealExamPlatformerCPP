@@ -1,9 +1,8 @@
 // Header wrotes in this way before the tip gave from professor about separate "Private and Public" files.
-#include "../Public/PlayerMovementComponent/PlayerMovementComponent.h"
+#include "../Public/PlayerMovementComponent.h"
 
 #include "EnhancedInputComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Components/CapsuleComponent.h"
 
 UPlayerMovementComponent::UPlayerMovementComponent()
 {

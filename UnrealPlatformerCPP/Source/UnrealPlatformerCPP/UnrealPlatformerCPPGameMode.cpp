@@ -1,5 +1,8 @@
 #include "UnrealPlatformerCPPGameMode.h"
-#include "PlayerCharacter/PlayerCharacter.h"
+#include "PlayerCharacter.h"
+// Header wrotes in this way before the tip gave from professor about separate "Private and Public" files.
+#include "Public/PlayerCharacterController.h"
+#include "PlayerCharacterState.h"
 
 AUnrealPlatformerCPPGameMode::AUnrealPlatformerCPPGameMode()
 {
@@ -9,4 +12,7 @@ AUnrealPlatformerCPPGameMode::AUnrealPlatformerCPPGameMode()
 	{
 		DefaultPawnClass = DefaultBPPawnClass.Class;
 	}
+
+	PlayerControllerClass = APlayerCharacterController::StaticClass();
+	PlayerStateClass = APlayerCharacterState::StaticClass();
 }

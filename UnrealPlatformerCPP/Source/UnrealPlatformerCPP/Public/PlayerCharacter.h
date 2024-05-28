@@ -2,8 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "../Utility/DataAssets/DataAsset_IA.h"
-#include "../PlayerMovementComponent/PlayerMovementComponent.h"
+#include "Utility/DataAssets/DataAsset_IA.h"
+#include "PlayerMovementComponent.h"
 #include "PlayerCharacter.generated.h"
 
 // Forward declaration about UInputMappingContext.
@@ -26,6 +26,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UPlayerMovementComponent* PlayerMovementComponent;
 
+	// Translate all this into playercontroller
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UInputMappingContext* InputMappingContext;
 

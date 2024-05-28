@@ -1,9 +1,8 @@
-#include "PlayerCharacter/PlayerCharacter.h"
+#include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "InputActionValue.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -67,7 +66,3 @@ void APlayerCharacter::PlayerMove(const FInputActionValue& Input)
 {
 	PlayerMovementComponent->PlayerMove(Input);
 }
-
-
-
-
