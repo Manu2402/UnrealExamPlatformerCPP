@@ -1,6 +1,7 @@
 #include "Widgets/SlotsWidget.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
+#include "Utility/Subsystems/PlatformerGameInstance.h"
 
 void USlotsWidget::NativeConstruct()
 {
@@ -20,27 +21,32 @@ void USlotsWidget::NativeConstruct()
 	{
 		SlotTwo->OnClicked.AddDynamic(this, &USlotsWidget::InitSlotTwo);
 	}
+
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(GetWorld());
+	PlatformerGameInstance = GameInstance->GetSubsystem<UPlatformerGameInstance>();
 }
 
 void USlotsWidget::InitSlotZero()
 {
-	CurrentSlotIndex = ESlotsIndex::Zero;
+	PlatformerGameInstance->SetCurrentSlotIndex(ESlotsIndex::Zero);
 	LoadLevel();
 }
 
 void USlotsWidget::InitSlotOne()
 {
-	CurrentSlotIndex = ESlotsIndex::One;
+	PlatformerGameInstance->SetCurrentSlotIndex(ESlotsIndex::One);
 	LoadLevel();
 }
 
 void USlotsWidget::InitSlotTwo()
 {
-	CurrentSlotIndex = ESlotsIndex::Two;
+	PlatformerGameInstance->SetCurrentSlotIndex(ESlotsIndex::Two);
 	LoadLevel();
 }
 
 void USlotsWidget::LoadLevel()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), MainLevelName);
+	FString SlotName = UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex());
+	PlatformerGameInstance->LoadGame(GetWorld(), SlotName, 0);
+	UGameplayStatics::OpenLevel(GetWorld(), PlatformerGameInstance->MainLevelName);
 }

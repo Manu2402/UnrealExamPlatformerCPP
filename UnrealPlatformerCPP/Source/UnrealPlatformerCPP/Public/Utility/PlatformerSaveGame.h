@@ -19,5 +19,8 @@ class UNREALPLATFORMERCPP_API UPlatformerSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 
+public:
+	UPlatformerSaveGame();
+
 	FSaveData SaveData;
 };

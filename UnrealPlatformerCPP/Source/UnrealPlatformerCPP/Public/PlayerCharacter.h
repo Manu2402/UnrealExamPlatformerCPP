@@ -41,9 +41,7 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable)
 	void PlayerJump();
-
-	UFUNCTION(BlueprintCallable)
 	void PlayerMove(const FInputActionValue& Input);
+	void Pause();
 };

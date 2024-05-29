@@ -3,6 +3,8 @@
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -54,6 +56,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		Input->BindAction(DataAsset_IA->JumpAction, ETriggerEvent::Started, this, &APlayerCharacter::PlayerJump);
 		Input->BindAction(DataAsset_IA->MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::PlayerMove);
+		Input->BindAction(DataAsset_IA->PauseAction, ETriggerEvent::Started, this, &APlayerCharacter::Pause);
 	}
 }
 
@@ -65,4 +68,11 @@ void APlayerCharacter::PlayerJump()
 void APlayerCharacter::PlayerMove(const FInputActionValue& Input)
 {
 	PlayerMovementComponent->PlayerMove(Input);
+}
+
+void APlayerCharacter::Pause()
+{
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(GetWorld());
+	UPlatformerGameInstance* PlatformerGameInstance = GameInstance->GetSubsystem<UPlatformerGameInstance>();
+	UGameplayStatics::OpenLevel(GetWorld(), PlatformerGameInstance->SlotsLevelName);
 }

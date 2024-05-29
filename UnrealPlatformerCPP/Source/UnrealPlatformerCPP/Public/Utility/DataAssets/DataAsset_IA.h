@@ -17,5 +17,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "InputActions")
 	UInputAction* MoveAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "InputActions")
+	UInputAction* PauseAction;
 	
 };
