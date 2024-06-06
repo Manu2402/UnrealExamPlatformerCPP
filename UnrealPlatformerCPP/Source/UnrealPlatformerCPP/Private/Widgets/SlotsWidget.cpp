@@ -47,6 +47,6 @@ void USlotsWidget::InitSlotTwo()
 void USlotsWidget::LoadLevel()
 {
 	FString SlotName = UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex());
-	PlatformerGameInstance->LoadGame(GetWorld(), SlotName, 0);
 	UGameplayStatics::OpenLevel(GetWorld(), PlatformerGameInstance->MainLevelName);
+	PlatformerGameInstance->LoadGame(GetWorld(), SlotName, 0);
 }
