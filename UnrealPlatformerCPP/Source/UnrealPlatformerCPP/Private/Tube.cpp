@@ -5,10 +5,28 @@ ATube::ATube()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootComponent = CreateDefaultSubobject<USceneComponent>("RootComponent");
+
 	TeleportTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("SaveTrigger"));
-	TeleportTrigger->SetBoxExtent(TriggerExtendParams);
-	TeleportTrigger->OnComponentBeginOverlap.AddDynamic(this, &ATube::OnBoxTriggered);
-	TeleportTrigger->OnComponentEndOverlap.AddDynamic(this, &ATube::OnBoxExitTrigger);
+	if (TeleportTrigger)
+	{
+		TeleportTrigger->SetBoxExtent(TriggerExtendParams);
+		TeleportTrigger->OnComponentBeginOverlap.AddDynamic(this, &ATube::OnBoxTriggered);
+		TeleportTrigger->OnComponentEndOverlap.AddDynamic(this, &ATube::OnBoxExitTrigger);
+
+		TeleportTrigger->SetupAttachment(RootComponent);
+	}
+
+	TubeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Game/Custom/Meshes/Tube/Tube.Tube"));
+	TubeMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TubeMeshComponent"));
+	if (TubeMeshComponent)
+	{
+		TubeMeshComponent->SetRelativeScale3D(FVector(0.7f, 0.7f, 0.5f));
+		TubeMeshComponent->SetStaticMesh(TubeMesh);
+		TubeMeshComponent->SetCollisionProfileName(NoCollisionPreset);
+
+		TubeMeshComponent->SetupAttachment(RootComponent);
+	}
 
 	// Temp
 	TeleportTrigger->bHiddenInGame = false;
@@ -17,7 +35,7 @@ ATube::ATube()
 void ATube::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void ATube::Tick(float DeltaTime)

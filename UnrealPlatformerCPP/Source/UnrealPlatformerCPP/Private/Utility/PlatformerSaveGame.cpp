@@ -2,6 +2,5 @@
 
 UPlatformerSaveGame::UPlatformerSaveGame()
 {
-	//
-	UE_LOG(LogTemp, Warning, TEXT("Ctor called"));
+
 }

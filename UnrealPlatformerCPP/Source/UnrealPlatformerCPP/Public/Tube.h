@@ -12,6 +12,7 @@ class UNREALPLATFORMERCPP_API ATube : public AActor
 public:	
 	ATube();
 
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -21,9 +22,15 @@ public:
 	void SetState(bool value);
 
 private:
-	const FVector& TriggerExtendParams = FVector(32, 32, 32);
+	const FVector& TriggerExtendParams = FVector(32, 32, 2);
+	const FVector& TriggerPosition = FVector(0, 0, -42);
 	const FName& PlayerTag = TEXT("Player");
+	const FName& NoCollisionPreset = TEXT("NoCollision");
+
+	UPROPERTY(EditAnywhere)
 	class UBoxComponent* TeleportTrigger;
+	class UStaticMeshComponent* TubeMeshComponent;
+	class UStaticMesh* TubeMesh;
 
 	bool State = true;
 

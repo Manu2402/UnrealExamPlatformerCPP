@@ -22,6 +22,7 @@ bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, c
 
 				UE_LOG(LogTemp, Warning, TEXT("LOAD BEFORE - Location: %s - Rotation: %s - CurrentPoints: %d"), *PlatformerSaveGame->SaveData.CharacterLocation.ToString(), *PlatformerSaveGame->SaveData.CharacterRotation.ToString(), PlatformerSaveGame->SaveData.CurrentPoints);
 
+				// Temp
 				UPlatformerSaveGame* LoadedGame = Cast<UPlatformerSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex));
 				if (LoadedGame)
 				{

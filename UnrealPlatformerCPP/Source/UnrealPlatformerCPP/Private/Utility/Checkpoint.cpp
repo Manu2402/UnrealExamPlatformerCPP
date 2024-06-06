@@ -10,6 +10,8 @@ ACheckpoint::ACheckpoint()
 	SaveTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("SaveTrigger"));
 	SaveTrigger->SetBoxExtent(TriggerExtendParams);
 	SaveTrigger->OnComponentBeginOverlap.AddDynamic(this, &ACheckpoint::OnBoxTriggered);
+
+	SaveTrigger->bHiddenInGame = false;
 }
 
 void ACheckpoint::BeginPlay()

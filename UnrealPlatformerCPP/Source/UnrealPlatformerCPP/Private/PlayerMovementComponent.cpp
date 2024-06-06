@@ -34,6 +34,15 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	// If Velocity is 0 than character is grounded.
 	bIsGrounded = Velocity.Z == 0;
 
+	if (!bCanMoveOnYAxisForward && Velocity.Y < 0)
+	{
+		bCanMoveOnYAxisForward = true;
+	}
+	if (!bCanMoveOnYAxisBackward && Velocity.Y > 0)
+	{
+		bCanMoveOnYAxisBackward = true;
+	}
+
 	// Sphere to track if there are some collision under of character.
 	SphereParams.SphereLocation = Owner->GetActorLocation() + DefaultSphereOffset;
 	FCollisionQueryParams QueryParams;
@@ -42,7 +51,7 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	{
 		bIsGrounded = false;
 	}
-	// DrawDebugSphere(World, SphereParams.SphereLocation, DefaultSphereRadius, 32, FColor::Green);
+	DrawDebugSphere(World, SphereParams.SphereLocation, DefaultSphereRadius, 32, FColor::Green);
 
 	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
 	{
@@ -53,6 +62,18 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		{
 			Velocity.Z = 0;
 			bIsGrounded = true;
+		}
+
+		if (HitResult.Normal.Y < 0)
+		{
+			Velocity.Y = 0; 
+			bCanMoveOnYAxisForward = false;
+		}
+
+		if (HitResult.Normal.Y > 0)
+		{
+			Velocity.Y = 0;
+			bCanMoveOnYAxisBackward = false;
 		}
 	}
 
@@ -73,13 +94,25 @@ void UPlayerMovementComponent::PlayerJump()
 void UPlayerMovementComponent::PlayerMove(const FInputActionValue& Input)
 {
 	const float Direction = Input.Get<float>();
-	CurrentSign = Direction > 0;
+	bCurrentSign = Direction > 0;
 
-	if (PreviousSign != CurrentSign)
+	FVector MoveDirection = UpdatedComponent->GetRightVector() * Direction * MovementSpeed;
+
+	if (bPreviousSign != bCurrentSign)
 	{
 		Owner->GetMesh()->AddWorldRotation(FRotator(0, 180, 0));
 	}
 
-	Velocity += UpdatedComponent->GetRightVector() * Direction * MovementSpeed;
-	PreviousSign = CurrentSign;
+	if (!bCanMoveOnYAxisForward && MoveDirection.Y > 0)
+	{
+		MoveDirection.Y = 0;
+	}
+	if (!bCanMoveOnYAxisBackward && MoveDirection.Y < 0)
+	{
+		MoveDirection.Y = 0;
+	}
+
+	Velocity += MoveDirection;
+
+	bPreviousSign = bCurrentSign;
 }

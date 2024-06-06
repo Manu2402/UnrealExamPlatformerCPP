@@ -25,8 +25,11 @@ private:
 	const float DefaultSphereRadius = 20;
 
 	// Flip look at.
-	bool PreviousSign = true;
-	bool CurrentSign;
+	bool bPreviousSign = true;
+	bool bCurrentSign;
+
+	bool bCanMoveOnYAxisForward = true;
+	bool bCanMoveOnYAxisBackward = true;
 
 	FHitResult HitResult;
 	FSphereParams SphereParams;
