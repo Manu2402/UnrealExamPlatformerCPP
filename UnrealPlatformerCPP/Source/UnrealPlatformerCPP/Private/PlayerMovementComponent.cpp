@@ -51,14 +51,14 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 	{
 		bIsGrounded = false;
 	}
-	DrawDebugSphere(World, SphereParams.SphereLocation, DefaultSphereRadius, 32, FColor::Green);
+	// DrawDebugSphere(World, SphereParams.SphereLocation, DefaultSphereRadius, 32, FColor::Green);
 
 	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
 	{
 		FVector Compenetration = GetPenetrationAdjustment(HitResult);
-		ResolvePenetration(Compenetration, HitResult, UpdatedComponent->GetComponentQuat());
+		GetOwner()->AddActorWorldOffset(-HitResult.ImpactNormal);
 
-		if (HitResult.Normal.Z > 0)
+		if (HitResult.Normal.Z > 0.8)
 		{
 			Velocity.Z = 0;
 			bIsGrounded = true;
@@ -66,7 +66,7 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 		if (HitResult.Normal.Y < 0)
 		{
-			Velocity.Y = 0; 
+			Velocity.Y = 0;
 			bCanMoveOnYAxisForward = false;
 		}
 

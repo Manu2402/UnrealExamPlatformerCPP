@@ -22,7 +22,7 @@ class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementCompone
 private:
 	const FVector Gravity = FVector(0, 0, -9.81f);
 	const FVector DefaultSphereOffset = FVector(0, 0, -90);
-	const float DefaultSphereRadius = 20;
+	const float DefaultSphereRadius = 15;
 
 	// Flip look at.
 	bool bPreviousSign = true;

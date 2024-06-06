@@ -27,9 +27,6 @@ ATube::ATube()
 
 		TubeMeshComponent->SetupAttachment(RootComponent);
 	}
-
-	// Temp
-	TeleportTrigger->bHiddenInGame = false;
 }
 
 void ATube::BeginPlay()
