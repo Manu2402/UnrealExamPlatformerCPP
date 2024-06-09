@@ -13,7 +13,7 @@ enum ESlotsIndex : uint8
 };
 
 UCLASS()
-class UNREALPLATFORMERCPP_API UPlatformerGameInstance : public UGameInstanceSubsystem
+class UNREALPLATFORMERCPP_API UPlatformerGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
@@ -29,4 +29,5 @@ public:
 
 	const FName& MainLevelName = TEXT("Main");
 	const FName& SlotsLevelName = TEXT("SlotsLevel");
+
 };

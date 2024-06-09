@@ -6,30 +6,23 @@
 
 bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, const int32 UserIndex)
 {
-	UPlatformerSaveGame* PlatformerSaveGame = Cast<UPlatformerSaveGame>(UGameplayStatics::CreateSaveGameObject(UPlatformerSaveGame::StaticClass()));
-	if (PlatformerSaveGame)
+	USaveGame* SaveGame = UGameplayStatics::CreateSaveGameObject(UPlatformerSaveGame::StaticClass());
+	if (SaveGame)
 	{
-		ACharacter* Character = UGameplayStatics::GetPlayerCharacter(World, 0);
-		if (Character)
+		UPlatformerSaveGame* PlatformerSaveGame = Cast<UPlatformerSaveGame>(SaveGame);
+		if (PlatformerSaveGame)
 		{
-			APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
-			if (PlayerCharacterState)
+			ACharacter* Character = UGameplayStatics::GetPlayerCharacter(World, 0);
+			if (Character)
 			{
-				PlatformerSaveGame->SaveData.CharacterLocation = Character->GetActorLocation();
-				PlatformerSaveGame->SaveData.CharacterRotation = Character->GetActorRotation();
-				PlatformerSaveGame->SaveData.CurrentPoints = PlayerCharacterState->GetCurrentPoints();
-				UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
-
-				UE_LOG(LogTemp, Warning, TEXT("LOAD BEFORE - Location: %s - Rotation: %s - CurrentPoints: %d"), *PlatformerSaveGame->SaveData.CharacterLocation.ToString(), *PlatformerSaveGame->SaveData.CharacterRotation.ToString(), PlatformerSaveGame->SaveData.CurrentPoints);
-
-				// Temp
-				UPlatformerSaveGame* LoadedGame = Cast<UPlatformerSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex));
-				if (LoadedGame)
+				APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
+				if (PlayerCharacterState)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("LOAD AFTER - Location: %s - Rotation: %s - CurrentPoints: %d"), *LoadedGame->SaveData.CharacterLocation.ToString(), *LoadedGame->SaveData.CharacterRotation.ToString(), LoadedGame->SaveData.CurrentPoints);
+					PlatformerSaveGame->SaveData.CharacterLocation = Character->GetActorLocation();
+					PlatformerSaveGame->SaveData.CharacterRotation = Character->GetMesh()->GetRelativeRotation();
+					PlatformerSaveGame->SaveData.CurrentPoints = PlayerCharacterState->GetCurrentPoints();
+					UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
 				}
-
-				return true;
 			}
 		}
 	}
@@ -48,8 +41,9 @@ bool UPlatformerGameInstance::LoadGame(UWorld* World, const FString& SlotName, c
 			if (PlayerCharacterState)
 			{
 				Character->SetActorLocation(PlatformerSaveGame->SaveData.CharacterLocation);
-				Character->SetActorRotation(PlatformerSaveGame->SaveData.CharacterRotation);
+				Character->GetMesh()->SetRelativeRotation(PlatformerSaveGame->SaveData.CharacterRotation);
 				PlayerCharacterState->SetCurrentPoints(PlatformerSaveGame->SaveData.CurrentPoints);
+
 				return true;
 			}
 		}

@@ -23,7 +23,7 @@ void USlotsWidget::NativeConstruct()
 	}
 
 	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(GetWorld());
-	PlatformerGameInstance = GameInstance->GetSubsystem<UPlatformerGameInstance>();
+	PlatformerGameInstance = Cast<UPlatformerGameInstance>(GameInstance);
 }
 
 void USlotsWidget::InitSlotZero()
@@ -48,5 +48,4 @@ void USlotsWidget::LoadLevel()
 {
 	FString SlotName = UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex());
 	UGameplayStatics::OpenLevel(GetWorld(), PlatformerGameInstance->MainLevelName);
-	PlatformerGameInstance->LoadGame(GetWorld(), SlotName, 0);
 }

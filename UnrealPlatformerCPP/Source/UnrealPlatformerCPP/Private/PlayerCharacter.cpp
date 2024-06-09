@@ -74,7 +74,10 @@ void APlayerCharacter::PlayerMove(const FInputActionValue& Input)
 
 void APlayerCharacter::Pause()
 {
-	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(GetWorld());
-	UPlatformerGameInstance* PlatformerGameInstance = GameInstance->GetSubsystem<UPlatformerGameInstance>();
+	UPlatformerGameInstance* PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (!PlatformerGameInstance)
+	{
+		return;
+	}
 	UGameplayStatics::OpenLevel(GetWorld(), PlatformerGameInstance->SlotsLevelName);
 }

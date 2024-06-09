@@ -10,13 +10,13 @@ struct FSaveData
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadWrite, Category = Basic)
+	UPROPERTY(VisibleAnywhere, Category = Basic)
 	FVector CharacterLocation;
 
-	UPROPERTY(BlueprintReadWrite, Category = Basic)
+	UPROPERTY(VisibleAnywhere, Category = Basic)
 	FRotator CharacterRotation;
 
-	UPROPERTY(BlueprintReadWrite, Category = Basic)
+	UPROPERTY(VisibleAnywhere, Category = Basic)
 	int32 CurrentPoints;
 };
 
@@ -28,5 +28,6 @@ class UNREALPLATFORMERCPP_API UPlatformerSaveGame : public USaveGame
 public:
 	UPlatformerSaveGame();
 
+	UPROPERTY(VisibleAnywhere, Category = Basic)
 	FSaveData SaveData;
 };

@@ -16,4 +16,5 @@ public:
 	virtual void BeginPlay() override;
 
 	void ToggleInputMode();
+	void LoadSaves();
 };

@@ -2,12 +2,27 @@
 #include "../Public/PlayerMovementComponent.h"
 
 #include "EnhancedInputComponent.h"
-#include "Kismet/KismetMathLibrary.h"
 
 UPlayerMovementComponent::UPlayerMovementComponent()
 {
 	PlayerJumpForce = 600;
 	MovementSpeed = 400;
+}
+
+void UPlayerMovementComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Owner = Cast<ACharacter>(GetOwner());
+	if (Owner)
+	{
+		USkeletalMeshComponent* SkeletalMesh = Owner->GetMesh();
+		if (SkeletalMesh)
+		{
+			// Setting initial forward.
+			bPreviousSign = SkeletalMesh->GetRightVector().Y > 0;
+		}
+	}
 }
 
 void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -100,7 +115,7 @@ void UPlayerMovementComponent::PlayerMove(const FInputActionValue& Input)
 
 	if (bPreviousSign != bCurrentSign)
 	{
-		Owner->GetMesh()->AddWorldRotation(FRotator(0, 180, 0));
+		Owner->GetMesh()->AddWorldRotation(FQuat(FRotator(0.f, 180.f, 0.f)));
 	}
 
 	if (!bCanMoveOnYAxisForward && MoveDirection.Y > 0)

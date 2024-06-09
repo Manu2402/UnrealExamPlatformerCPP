@@ -5,7 +5,7 @@
 #include "GameFramework/Character.h"
 #include "PlayerMovementComponent.generated.h"
 
-USTRUCT(BlueprintType)
+USTRUCT()
 struct FSphereParams
 {
 	GENERATED_BODY()
@@ -14,7 +14,7 @@ struct FSphereParams
 	float SphereRadius;
 };
 
-UCLASS(BlueprintType, Blueprintable)
+UCLASS()
 class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementComponent
 {
 	GENERATED_BODY()
@@ -25,7 +25,7 @@ private:
 	const float DefaultSphereRadius = 15;
 
 	// Flip look at.
-	bool bPreviousSign = true;
+	bool bPreviousSign;
 	bool bCurrentSign;
 
 	bool bCanMoveOnYAxisForward = true;
@@ -38,6 +38,8 @@ private:
 	
 public:
 	UPlayerMovementComponent();
+
+	virtual void BeginPlay();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float PlayerJumpForce;
