@@ -22,6 +22,8 @@ bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, c
 					PlatformerSaveGame->SaveData.CharacterRotation = Character->GetMesh()->GetRelativeRotation();
 					PlatformerSaveGame->SaveData.CurrentPoints = PlayerCharacterState->GetCurrentPoints();
 					UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
+
+					return true;
 				}
 			}
 		}
