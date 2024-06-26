@@ -11,6 +11,9 @@ class UNREALPLATFORMERCPP_API AMainLevelScriptActor : public ALevelScriptActor
 	
 private:
 	FInputModeGameOnly InputMode = FInputModeGameOnly(); // Not const because i will use it to do a cast.
+	
+	class TSubclassOf<UUserWidget> ScoreWidgetClass;
+	class UScoreWidget* ScoreWidgetInstance;
 
 public:
 	virtual void BeginPlay() override;

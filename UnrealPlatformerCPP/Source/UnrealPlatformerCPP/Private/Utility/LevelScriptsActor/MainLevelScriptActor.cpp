@@ -2,6 +2,7 @@
 #include "Utility/Subsystems/PlatformerGameInstance.h"
 #include "PlayerCharacterController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Widgets/ScoreWidget.h"
 
 void AMainLevelScriptActor::BeginPlay()
 {
@@ -9,6 +10,13 @@ void AMainLevelScriptActor::BeginPlay()
 
 	ToggleInputMode();
 	LoadSaves();
+
+	ScoreWidgetClass = LoadClass<UScoreWidget>(nullptr, TEXT("/Game/Custom/Widgets/WBP_ScoreWidget.WBP_ScoreWidget_C"));
+	ScoreWidgetInstance = CreateWidget<UScoreWidget>(UGameplayStatics::GetPlayerController(GetWorld(), 0), ScoreWidgetClass);
+	if (ScoreWidgetInstance)
+	{
+		ScoreWidgetInstance->AddToViewport();
+	}
 }
 
 void AMainLevelScriptActor::ToggleInputMode()
