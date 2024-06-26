@@ -70,25 +70,27 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
 	{
-		FVector Compenetration = GetPenetrationAdjustment(HitResult);
 		GetOwner()->AddActorWorldOffset(-HitResult.ImpactNormal);
-
-		if (HitResult.Normal.Z > 0.8)
+		
+		if (!HitResult.GetActor()->ActorHasTag("MovementIgnored"))
 		{
-			Velocity.Z = 0;
-			bIsGrounded = true;
-		}
+			if (HitResult.Normal.Z > 0.8)
+			{
+				Velocity.Z = 0;
+				bIsGrounded = true;
+			}
 
-		if (HitResult.Normal.Y < 0)
-		{
-			Velocity.Y = 0;
-			bCanMoveOnYAxisForward = false;
-		}
+			if (HitResult.Normal.Y < 0)
+			{
+				Velocity.Y = 0;
+				bCanMoveOnYAxisForward = false;
+			}
 
-		if (HitResult.Normal.Y > 0)
-		{
-			Velocity.Y = 0;
-			bCanMoveOnYAxisBackward = false;
+			if (HitResult.Normal.Y > 0)
+			{
+				Velocity.Y = 0;
+				bCanMoveOnYAxisBackward = false;
+			}
 		}
 	}
 
@@ -130,4 +132,10 @@ void UPlayerMovementComponent::PlayerMove(const FInputActionValue& Input)
 	Velocity += MoveDirection;
 
 	bPreviousSign = bCurrentSign;
+}
+
+void UPlayerMovementComponent::AbilityToMoveOnY(bool Value)
+{
+	bCanMoveOnYAxisForward = Value;
+	bCanMoveOnYAxisBackward = Value;
 }

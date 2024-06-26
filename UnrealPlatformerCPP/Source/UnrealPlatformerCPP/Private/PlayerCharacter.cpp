@@ -3,6 +3,7 @@
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "Utility/Subsystems/PlatformerGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -18,6 +19,18 @@ APlayerCharacter::APlayerCharacter()
 		CameraComponent->SetWorldLocation(GetActorLocation() - CameraOffset);
 	}
 
+	MovementCheckCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("MovementCheckCollider"));
+	if (MovementCheckCollider)
+	{
+		MovementCheckCollider->SetBoxExtent(MovementCheckBoxExtents);
+
+		MovementCheckCollider->bHiddenInGame = false;
+		MovementCheckCollider->SetupAttachment(RootComponent);
+
+		MovementCheckCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBoxTriggered);
+		MovementCheckCollider->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnBoxExitTrigger);
+	}						   
+
 	PlayerMovementComponent = CreateDefaultSubobject<UPlayerMovementComponent>(TEXT("PlayerMovementComponent"));
 
 	CameraComponent->SetupAttachment(RootComponent);
@@ -25,6 +38,16 @@ APlayerCharacter::APlayerCharacter()
 	// Set ABP.
 	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("/Game/Custom/Blueprints/ABP_PlayerCharacter.ABP_PlayerCharacter"));
 	GetMesh()->SetAnimInstanceClass(AnimBlueprint.Object->GeneratedClass);
+}
+
+void APlayerCharacter::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("SAS"));
+}
+
+void APlayerCharacter::OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	PlayerMovementComponent->AbilityToMoveOnY(true);
 }
 
 void APlayerCharacter::BeginPlay()

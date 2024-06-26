@@ -5,6 +5,8 @@ APlatformEE::APlatformEE()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	Tags.Add("MovementIgnored");
+
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
 	TriggerCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerCollider"));

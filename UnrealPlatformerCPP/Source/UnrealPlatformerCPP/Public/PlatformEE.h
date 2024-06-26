@@ -21,7 +21,7 @@ public:
 private:
 	const FVector& TriggerExtendParams = FVector(40, 40, 10);
 	const FVector& TriggerLocation = FVector(0, 0, 10);
-	const FVector& MeshScaleParams = FVector(1, 1, 0.1);
+	const FVector& MeshScaleParams = FVector(1, 1, 0.08);
 
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* TriggerCollider;

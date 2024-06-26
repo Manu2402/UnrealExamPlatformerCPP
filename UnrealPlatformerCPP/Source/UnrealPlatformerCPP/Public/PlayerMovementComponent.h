@@ -23,6 +23,7 @@ private:
 	const FVector Gravity = FVector(0, 0, -9.81f);
 	const FVector DefaultSphereOffset = FVector(0, 0, -90);
 	const float DefaultSphereRadius = 15;
+	const float ZScaleMax = 30;
 
 	// Flip look at.
 	bool bPreviousSign;
@@ -55,4 +56,6 @@ public:
 	void PlayerJump();
 
 	void PlayerMove(const struct FInputActionValue& Input);
+
+	void AbilityToMoveOnY(bool Value);
 };
