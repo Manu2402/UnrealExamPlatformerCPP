@@ -1,9 +1,15 @@
 #include "Widgets/ScoreWidget.h"
 #include "Components/TextBlock.h"
+#include "PlayerCharacterState.h"
+#include "Kismet/GameplayStatics.h"
 
 void UScoreWidget::NativeConstruct()
 {
-	SetScore(250);
+	APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (PlayerCharacterState)
+	{
+		SetScore(PlayerCharacterState->GetCurrentPoints());
+	}
 }
 
 void UScoreWidget::SetScore(int32 Score)

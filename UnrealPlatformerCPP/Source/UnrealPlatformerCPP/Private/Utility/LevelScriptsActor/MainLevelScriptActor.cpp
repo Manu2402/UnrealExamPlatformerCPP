@@ -36,3 +36,8 @@ void AMainLevelScriptActor::LoadSaves()
 		PlatformerGameInstance->LoadGame(GetWorld(), UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex()), 0);
 	}
 }
+
+void AMainLevelScriptActor::SetScore(int32 Score)
+{
+	ScoreWidgetInstance->SetScore(Score);
+}

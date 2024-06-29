@@ -13,10 +13,11 @@ protected:
 	// Called when added to viewport.
 	virtual void NativeConstruct() override;
 
+public:
+	void SetScore(int32 Score);
+
 private:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* ScoreText;
-
-	void SetScore(int32 Score);
 	
 };

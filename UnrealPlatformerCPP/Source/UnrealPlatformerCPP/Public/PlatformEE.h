@@ -2,10 +2,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/ToggleScore.h"
 #include "PlatformEE.generated.h"
 
 UCLASS()
-class UNREALPLATFORMERCPP_API APlatformEE : public AActor
+class UNREALPLATFORMERCPP_API APlatformEE : public AActor, public IToggleScore
 {
 	GENERATED_BODY()
 	
@@ -23,6 +24,8 @@ private:
 	const FVector& TriggerLocation = FVector(0, 0, 10);
 	const FVector& MeshScaleParams = FVector(1, 1, 0.08);
 
+	bool IsActive = true;
+
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* TriggerCollider;
 	UPROPERTY(EditAnywhere)
@@ -32,5 +35,7 @@ private:
 	void OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
+
+	void ToggleScore(int32 Score);
 
 };

@@ -12,8 +12,10 @@ class UNREALPLATFORMERCPP_API APlayerCharacterState : public APlayerState
 
 public:
 	APlayerCharacterState();
+
 	int32 GetCurrentPoints() const;
 	void SetCurrentPoints(const int32 Points);
+	bool Losing() const;
 
 private:
 	const int32 StartPoints = 100;

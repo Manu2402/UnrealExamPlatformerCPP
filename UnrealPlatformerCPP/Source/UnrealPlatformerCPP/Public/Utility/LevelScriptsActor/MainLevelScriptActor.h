@@ -20,4 +20,5 @@ public:
 
 	void ToggleInputMode();
 	void LoadSaves();
+	void SetScore(int32 Score);
 };

@@ -53,6 +53,12 @@ bool UPlatformerGameInstance::LoadGame(UWorld* World, const FString& SlotName, c
 	return false;
 }
 
+bool UPlatformerGameInstance::LoseGame(const FString& SlotName, const int32 UserIndex)
+{
+	UGameplayStatics::OpenLevel(GetWorld(), SlotsLevelName);
+	return UGameplayStatics::DeleteGameInSlot(SlotName, UserIndex);
+}
+
 ESlotsIndex UPlatformerGameInstance::GetCurrentSlotIndex() const
 {
 	return CurrentSlotIndex;

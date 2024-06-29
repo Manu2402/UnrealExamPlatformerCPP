@@ -21,13 +21,13 @@ private:
 	ESlotsIndex CurrentSlotIndex;
 
 public:
-	bool SaveGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
-	bool LoadGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
-
-	ESlotsIndex GetCurrentSlotIndex() const;
-	void SetCurrentSlotIndex(ESlotsIndex SlotIndex);
-
 	const FName& MainLevelName = TEXT("Main");
 	const FName& SlotsLevelName = TEXT("SlotsLevel");
 
+	bool SaveGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
+	bool LoadGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
+	bool LoseGame(const FString& SlotName, const int32 UserIndex);
+
+	ESlotsIndex GetCurrentSlotIndex() const;
+	void SetCurrentSlotIndex(ESlotsIndex SlotIndex);
 };

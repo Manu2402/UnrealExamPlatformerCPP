@@ -1,4 +1,5 @@
 #include "PlayerCharacterState.h"
+#include "Kismet/GameplayStatics.h"
 
 APlayerCharacterState::APlayerCharacterState()
 {
@@ -12,5 +13,10 @@ int32 APlayerCharacterState::GetCurrentPoints() const
 
 void APlayerCharacterState::SetCurrentPoints(const int32 Points)
 {
-	CurrentPoints = Points;
+	CurrentPoints = Points > 0 ? Points : 0;
+}
+
+bool APlayerCharacterState::Losing() const
+{
+	return CurrentPoints <= 0;
 }

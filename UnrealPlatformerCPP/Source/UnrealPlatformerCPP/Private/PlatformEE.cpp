@@ -1,5 +1,9 @@
 #include "PlatformEE.h"
 #include "Components/BoxComponent.h"
+#include "PlayerCharacterState.h"
+#include "Kismet/GameplayStatics.h"
+#include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
+#include "Utility/Subsystems/PlatformerGameInstance.h"
 
 APlatformEE::APlatformEE()
 {
@@ -53,5 +57,41 @@ void APlatformEE::Tick(float DeltaTime)
 
 void APlatformEE::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("SAS"));
+	if (!IsActive)
+	{
+		return;
+	}
+
+	IsActive = false;
+	ToggleScore(666);
+}
+
+void APlatformEE::ToggleScore(int32 Score)
+{
+	APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
+	if (PlayerCharacterState)
+	{
+		PlayerCharacterState->SetCurrentPoints(Score);
+
+		ULevel* CurrentLevel = GetWorld()->GetCurrentLevel();
+		if (CurrentLevel)
+		{
+			AMainLevelScriptActor* MainLevelScriptActor = Cast<AMainLevelScriptActor>(CurrentLevel->GetLevelScriptActor());
+			if (MainLevelScriptActor)
+			{
+				MainLevelScriptActor->SetScore(PlayerCharacterState->GetCurrentPoints());
+			}
+		}
+
+		if (!PlayerCharacterState->Losing())
+		{
+			return;
+		}
+		
+		UPlatformerGameInstance* PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+		if (PlatformerGameInstance)
+		{
+			PlatformerGameInstance->LoseGame(UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex()), 0);
+		}
+	}
 }
