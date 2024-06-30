@@ -20,5 +20,7 @@ public:
 
 	void ToggleInputMode();
 	void LoadSaves();
-	void SetScore(int32 Score);
+
+	void SetScoreOnUI(int32 Score);
+	void SetBestScoreOnUI(int32 Score);
 };

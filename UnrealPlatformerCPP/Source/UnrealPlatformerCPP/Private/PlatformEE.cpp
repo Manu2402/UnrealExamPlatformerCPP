@@ -57,12 +57,12 @@ void APlatformEE::Tick(float DeltaTime)
 
 void APlatformEE::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!IsActive)
+	if (!bIsActive)
 	{
 		return;
 	}
 
-	IsActive = false;
+	bIsActive = false;
 	ToggleScore(666);
 }
 
@@ -71,7 +71,7 @@ void APlatformEE::ToggleScore(int32 Score)
 	APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
 	if (PlayerCharacterState)
 	{
-		PlayerCharacterState->SetCurrentPoints(Score);
+		PlayerCharacterState->SetCurrentScore(Score);
 
 		ULevel* CurrentLevel = GetWorld()->GetCurrentLevel();
 		if (CurrentLevel)
@@ -79,19 +79,10 @@ void APlatformEE::ToggleScore(int32 Score)
 			AMainLevelScriptActor* MainLevelScriptActor = Cast<AMainLevelScriptActor>(CurrentLevel->GetLevelScriptActor());
 			if (MainLevelScriptActor)
 			{
-				MainLevelScriptActor->SetScore(PlayerCharacterState->GetCurrentPoints());
+				MainLevelScriptActor->SetScoreOnUI(PlayerCharacterState->GetCurrentScore());
 			}
 		}
-
-		if (!PlayerCharacterState->Losing())
-		{
-			return;
-		}
-		
-		UPlatformerGameInstance* PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-		if (PlatformerGameInstance)
-		{
-			PlatformerGameInstance->LoseGame(UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex()), 0);
-		}
 	}
+
+	// Apply Post processing red tint into camera.
 }

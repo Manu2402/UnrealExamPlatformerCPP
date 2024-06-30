@@ -24,9 +24,14 @@ public:
 	const FName& MainLevelName = TEXT("Main");
 	const FName& SlotsLevelName = TEXT("SlotsLevel");
 
+	const FString& BestScoreSlotName = TEXT("BestScoreSlot");
+
 	bool SaveGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
 	bool LoadGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
-	bool LoseGame(const FString& SlotName, const int32 UserIndex);
+	bool EndGame(const FString& SlotName, const int32 UserIndex);
+
+	bool SaveBestScore(UWorld* World, const int32& UserIndex);
+	bool LoadBestScore(UWorld* World, const int32& UserIndex);
 
 	ESlotsIndex GetCurrentSlotIndex() const;
 	void SetCurrentSlotIndex(ESlotsIndex SlotIndex);

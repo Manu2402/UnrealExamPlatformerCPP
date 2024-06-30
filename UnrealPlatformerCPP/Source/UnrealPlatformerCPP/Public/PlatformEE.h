@@ -24,7 +24,7 @@ private:
 	const FVector& TriggerLocation = FVector(0, 0, 10);
 	const FVector& MeshScaleParams = FVector(1, 1, 0.08);
 
-	bool IsActive = true;
+	bool bIsActive = true;
 
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* TriggerCollider;

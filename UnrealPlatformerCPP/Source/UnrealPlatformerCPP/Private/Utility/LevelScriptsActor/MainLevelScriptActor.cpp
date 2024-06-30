@@ -3,6 +3,7 @@
 #include "PlayerCharacterController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/ScoreWidget.h"
+#include "PlayerCharacterState.h"
 
 void AMainLevelScriptActor::BeginPlay()
 {
@@ -33,11 +34,18 @@ void AMainLevelScriptActor::LoadSaves()
 	UPlatformerGameInstance* PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (PlatformerGameInstance)
 	{
-		PlatformerGameInstance->LoadGame(GetWorld(), UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex()), 0);
+		UWorld* World = GetWorld();
+		PlatformerGameInstance->LoadGame(World, UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex()), 0);
+		PlatformerGameInstance->LoadBestScore(World, 0);
 	}
 }
 
-void AMainLevelScriptActor::SetScore(int32 Score)
+void AMainLevelScriptActor::SetScoreOnUI(int32 Score)
 {
 	ScoreWidgetInstance->SetScore(Score);
+}
+
+void AMainLevelScriptActor::SetBestScoreOnUI(int32 Score)
+{
+	ScoreWidgetInstance->SetBestScore(Score);
 }

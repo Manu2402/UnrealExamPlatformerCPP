@@ -1,6 +1,9 @@
 #include "Utility/FlagPole.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/BoxComponent.h"
+#include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "PlayerCharacterState.h"
+#include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 
 AFlagPole::AFlagPole()
 {
@@ -47,7 +50,7 @@ AFlagPole::AFlagPole()
 void AFlagPole::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 void AFlagPole::Tick(float DeltaTime)
@@ -58,5 +61,30 @@ void AFlagPole::Tick(float DeltaTime)
 
 void AFlagPole::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UGameplayStatics::OpenLevel(GetWorld(), SlotsLevelName);
+	UWorld* World = GetWorld();
+	// Controllare se è il best score e salvarlo in caso
+	APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
+	UPlatformerGameInstance* PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(World));
+	
+	if (!PlatformerGameInstance)
+	{
+		return;
+	}
+
+	if (PlayerCharacterState)
+	{
+		if (PlayerCharacterState->GetCurrentScore() > PlayerCharacterState->GetBestScore())
+		{
+			PlayerCharacterState->SetBestScore(PlayerCharacterState->GetCurrentScore());
+			PlatformerGameInstance->SaveBestScore(World, 0);
+
+			AMainLevelScriptActor* MainLevelScriptActor = Cast<AMainLevelScriptActor>(World->GetLevelScriptActor());
+			if (MainLevelScriptActor)
+			{
+				MainLevelScriptActor->SetBestScoreOnUI(PlayerCharacterState->GetBestScore());
+			}
+		}
+
+		PlatformerGameInstance->EndGame(UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex()), 0);
+	}
 }

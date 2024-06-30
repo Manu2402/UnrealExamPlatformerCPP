@@ -1,22 +1,32 @@
 #include "PlayerCharacterState.h"
-#include "Kismet/GameplayStatics.h"
 
 APlayerCharacterState::APlayerCharacterState()
 {
-	CurrentPoints = StartPoints;
+	CurrentScore = StartScore;
+	BestScore = StartBestScore;
 }
 
-int32 APlayerCharacterState::GetCurrentPoints() const
+int32 APlayerCharacterState::GetCurrentScore() const
 {
-	return CurrentPoints;
+	return CurrentScore;
 }
 
-void APlayerCharacterState::SetCurrentPoints(const int32 Points)
+void APlayerCharacterState::SetCurrentScore(const int32& NewScore)
 {
-	CurrentPoints = Points > 0 ? Points : 0;
+	CurrentScore = NewScore > 0 ? NewScore : 0;
 }
 
 bool APlayerCharacterState::Losing() const
 {
-	return CurrentPoints <= 0;
+	return CurrentScore <= 0;
+}
+
+int32 APlayerCharacterState::GetBestScore() const
+{
+	return BestScore;
+}
+
+void APlayerCharacterState::SetBestScore(const int32& NewScore)
+{
+	BestScore = NewScore;
 }

@@ -15,9 +15,15 @@ protected:
 
 public:
 	void SetScore(int32 Score);
+	void SetBestScore(int32 Score);
 
 private:
+	const FText& VoidBestScore = FText::FromString(TEXT("###"));
+
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UTextBlock* ScoreText;
+
+	UPROPERTY(EditAnywhere, meta = (BindWidget))
+	class UTextBlock* BestScoreText;
 	
 };

@@ -13,12 +13,18 @@ class UNREALPLATFORMERCPP_API APlayerCharacterState : public APlayerState
 public:
 	APlayerCharacterState();
 
-	int32 GetCurrentPoints() const;
-	void SetCurrentPoints(const int32 Points);
+	int32 GetCurrentScore() const;
+	void SetCurrentScore(const int32& NewScore);
 	bool Losing() const;
 
+	int32 GetBestScore() const;
+	void SetBestScore(const int32& NewScore);
+
 private:
-	const int32 StartPoints = 100;
-	int32 CurrentPoints;
-	
+	const int32& StartScore = 100;
+	const int32& StartBestScore = -1;
+
+	int32 CurrentScore;
+	int32 BestScore;
+
 };
