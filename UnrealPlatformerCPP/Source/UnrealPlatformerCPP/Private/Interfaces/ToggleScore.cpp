@@ -2,5 +2,5 @@
 
 void IToggleScore::ToggleScore(int32 Score)
 {
-	// Nothing
+	// Nothing.
 }

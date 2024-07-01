@@ -18,16 +18,13 @@ class UNREALPLATFORMERCPP_API APlayerCharacter : public ACharacter
 public:
 	APlayerCharacter();
 
-	const FVector& CameraOffset = FVector(-660, 0, 60);
-	const FVector& MovementCheckBoxExtents = FVector(32, 32, 80);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* CameraComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	UPlayerMovementComponent* PlayerMovementComponent;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UBoxComponent* MovementCheckCollider;
 
 	// Translate all this into playercontroller
@@ -37,11 +34,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UDataAsset_IA* DataAsset_IA; // Database composed by input action assets.
 
-	UFUNCTION()
-	void OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-		bool bFromSweep, const FHitResult& SweepResult);
-
+private:
+	const FVector& CameraOffset = FVector(-660, 0, 60);
+	const FVector& MovementCheckBoxExtents = FVector(32, 32, 80);
+	const FName& PlayerTagName = TEXT("Player");
+	
 	UFUNCTION()
 	void OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
@@ -56,5 +53,5 @@ public:
 
 	void PlayerJump();
 	void PlayerMove(const FInputActionValue& Input);
-	void Pause();
+	void BackMenu();
 };

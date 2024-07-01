@@ -1,99 +1,130 @@
 #include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 #include "Utility/PlatformerSaveGame.h"
 #include "Utility/BestScoreSaveGame.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayerCharacterState.h"
 #include "PlayerCharacter.h"
-#include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 
-bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, const int32 UserIndex)
+bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, int32 UserIndex)
 {
-	USaveGame* SaveGame = UGameplayStatics::CreateSaveGameObject(UPlatformerSaveGame::StaticClass());
-	if (SaveGame)
+	PlatformerSaveGame = Cast<UPlatformerSaveGame>(UGameplayStatics::CreateSaveGameObject(UPlatformerSaveGame::StaticClass()));
+	if (!PlatformerSaveGame)
 	{
-		UPlatformerSaveGame* PlatformerSaveGame = Cast<UPlatformerSaveGame>(SaveGame);
-		if (PlatformerSaveGame)
-		{
-			ACharacter* Character = UGameplayStatics::GetPlayerCharacter(World, 0);
-			if (Character)
-			{
-				APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
-				if (PlayerCharacterState)
-				{
-					PlatformerSaveGame->SaveData.CharacterLocation = Character->GetActorLocation();
-					PlatformerSaveGame->SaveData.CharacterRotation = Character->GetMesh()->GetRelativeRotation();
-					PlatformerSaveGame->SaveData.CurrentPoints = PlayerCharacterState->GetCurrentScore();
-					UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
-
-					return true;
-				}
-			}
-		}
+		return false;
 	}
-	return false;
+
+	Character = UGameplayStatics::GetPlayerCharacter(World, 0);
+	if (!Character)
+	{
+		return false;
+	}
+
+	PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
+	if (!PlayerCharacterState)
+	{
+		return false;
+	}
+
+	MainLevelScriptActor = Cast<AMainLevelScriptActor>(World->GetCurrentLevel()->GetLevelScriptActor());
+	if (!MainLevelScriptActor)
+	{
+		return false;
+	}
+
+	PlatformerSaveGame->SaveData.CharacterLocation = Character->GetActorLocation();
+	PlatformerSaveGame->SaveData.CharacterRotation = Character->GetMesh()->GetRelativeRotation();
+	PlatformerSaveGame->SaveData.CurrentPoints = PlayerCharacterState->GetCurrentScore();
+	PlatformerSaveGame->SaveData.PPWeight = MainLevelScriptActor->GetPPWeight();
+
+	UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
+	return true;
 }
 
-bool UPlatformerGameInstance::LoadGame(UWorld* World, const FString& SlotName, const int32 UserIndex)
+bool UPlatformerGameInstance::LoadGame(UWorld* World, const FString& SlotName, int32 UserIndex)
 {
-	UPlatformerSaveGame* PlatformerSaveGame = Cast<UPlatformerSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex));
-	if (PlatformerSaveGame)
+	PlatformerSaveGame = Cast<UPlatformerSaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex));
+	if (!PlatformerSaveGame)
 	{
-		ACharacter* Character = UGameplayStatics::GetPlayerCharacter(World, 0);
-		if (Character)
-		{
-			APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
-			if (PlayerCharacterState)
-			{
-				Character->SetActorLocation(PlatformerSaveGame->SaveData.CharacterLocation);
-				Character->GetMesh()->SetRelativeRotation(PlatformerSaveGame->SaveData.CharacterRotation);
-				PlayerCharacterState->SetCurrentScore(PlatformerSaveGame->SaveData.CurrentPoints);
-
-				return true;
-			}
-		}
+		return false;
 	}
-	return false;
+
+	Character = UGameplayStatics::GetPlayerCharacter(World, 0);
+	if (!Character)
+	{
+		return false;
+	}
+
+	PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
+	if (!PlayerCharacterState)
+	{
+		return false;
+	}
+
+	MainLevelScriptActor = Cast<AMainLevelScriptActor>(World->GetCurrentLevel()->GetLevelScriptActor());
+	if (!MainLevelScriptActor)
+	{
+		return false;
+	}
+
+	Character->SetActorLocation(PlatformerSaveGame->SaveData.CharacterLocation);
+	Character->GetMesh()->SetRelativeRotation(PlatformerSaveGame->SaveData.CharacterRotation);
+	PlayerCharacterState->SetCurrentScore(PlatformerSaveGame->SaveData.CurrentPoints);
+	MainLevelScriptActor->SetPPWeight(PlatformerSaveGame->SaveData.PPWeight);
+
+	return true;
 }
 
-bool UPlatformerGameInstance::EndGame(const FString& SlotName, const int32 UserIndex)
+bool UPlatformerGameInstance::EndGame(const FString& SlotName, int32 UserIndex)
 {
 	UGameplayStatics::OpenLevel(GetWorld(), SlotsLevelName);
 	return UGameplayStatics::DeleteGameInSlot(SlotName, UserIndex);
 }
 
-bool UPlatformerGameInstance::SaveBestScore(UWorld* World, const int32& UserIndex)
+bool UPlatformerGameInstance::SaveBestScore(UWorld* World, int32 UserIndex)
 {
-	UBestScoreSaveGame* BestScoreSaveGame = Cast<UBestScoreSaveGame>(UGameplayStatics::CreateSaveGameObject(UBestScoreSaveGame::StaticClass()));
-	if (BestScoreSaveGame)
+	BestScoreSaveGame = Cast<UBestScoreSaveGame>(UGameplayStatics::CreateSaveGameObject(UBestScoreSaveGame::StaticClass()));
+	if (!BestScoreSaveGame)
 	{
-		APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
-		if (PlayerCharacterState)
-		{
-			BestScoreSaveGame->BestScore = PlayerCharacterState->GetBestScore();
-			UGameplayStatics::SaveGameToSlot(BestScoreSaveGame, BestScoreSlotName, UserIndex);
-
-			return true;
-		}
+		return false;
 	}
 
-	return false;
+	PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
+	if (!PlayerCharacterState)
+	{
+		return false;
+	}
+
+	BestScoreSaveGame->BestScore = PlayerCharacterState->GetBestScore();
+	UGameplayStatics::SaveGameToSlot(BestScoreSaveGame, BestScoreSlotName, UserIndex);
+
+	return true;
 }
 
-bool UPlatformerGameInstance::LoadBestScore(UWorld* World, const int32& UserIndex)
+bool UPlatformerGameInstance::LoadBestScore(UWorld* World, int32 UserIndex)
 {
-	UBestScoreSaveGame* BestScoreSaveGame = Cast<UBestScoreSaveGame>(UGameplayStatics::LoadGameFromSlot(BestScoreSlotName, 0));
-	if (BestScoreSaveGame)
+	BestScoreSaveGame = Cast<UBestScoreSaveGame>(UGameplayStatics::LoadGameFromSlot(BestScoreSlotName, UserIndex));
+	if (!BestScoreSaveGame)
 	{
-		APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
-		if (PlayerCharacterState)
-		{
-			PlayerCharacterState->SetBestScore(BestScoreSaveGame->BestScore);
-
-			return true;
-		}
+		return false;
 	}
 
-	return false;
+	PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
+	if (!PlayerCharacterState)
+	{
+		return false;
+	}
+
+	MainLevelScriptActor = Cast<AMainLevelScriptActor>(World->GetCurrentLevel()->GetLevelScriptActor());
+	if (!MainLevelScriptActor)
+	{
+		return false;
+	}
+
+	PlayerCharacterState->SetBestScore(BestScoreSaveGame->BestScore);
+	MainLevelScriptActor->SetBestScoreOnUI(PlayerCharacterState->GetBestScore());
+
+	return true;
 }
 
 ESlotsIndex UPlatformerGameInstance::GetCurrentSlotIndex() const
@@ -101,7 +132,7 @@ ESlotsIndex UPlatformerGameInstance::GetCurrentSlotIndex() const
 	return CurrentSlotIndex;
 }
 
-void UPlatformerGameInstance::SetCurrentSlotIndex(ESlotsIndex SlotIndex)
+void UPlatformerGameInstance::SetCurrentSlotIndex(const ESlotsIndex& SlotIndex)
 {
 	CurrentSlotIndex = SlotIndex;
 }

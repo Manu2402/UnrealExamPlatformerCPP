@@ -11,12 +11,17 @@ class UNREALPLATFORMERCPP_API ASlotsLevelScriptActor : public ALevelScriptActor
 	GENERATED_BODY()
 
 private:
+	const TCHAR* SlotsWidgetPath = TEXT("/Game/Custom/Widgets/WBP_SlotsWidget.WBP_SlotsWidget_C");
+
 	FInputModeUIOnly InputMode = FInputModeUIOnly(); // Not const because i will use it to do a cast.
+	
+	class APlayerCharacterController* PlayerCharacterController;
+	UWorld* World;
 
 public:
 	virtual void BeginPlay() override;
 
-	class TSubclassOf<UUserWidget> SlotsWidgetClass;
+	class TSubclassOf<UUserWidget> SlotsWidgetClass = LoadClass<class USlotsWidget>(nullptr, TEXT("/Game/Custom/Widgets/WBP_ScoreWidget.WBP_ScoreWidget_C"));
 	class USlotsWidget* SlotsWidgetInstance;
 
 	void InitSlotsWidget();

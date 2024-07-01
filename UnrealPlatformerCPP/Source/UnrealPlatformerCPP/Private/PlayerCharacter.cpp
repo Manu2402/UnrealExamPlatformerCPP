@@ -11,11 +11,12 @@ APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	Tags.Add(TEXT("Player"));
+	Tags.Add(PlayerTagName);
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	if (CameraComponent)
 	{
+		// Camera position.
 		CameraComponent->SetWorldLocation(GetActorLocation() - CameraOffset);
 	}
 
@@ -27,22 +28,21 @@ APlayerCharacter::APlayerCharacter()
 		MovementCheckCollider->bHiddenInGame = false;
 		MovementCheckCollider->SetupAttachment(RootComponent);
 
-		MovementCheckCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBoxTriggered);
+		// Collider overlap events.
 		MovementCheckCollider->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnBoxExitTrigger);
-	}						   
+	}
 
 	PlayerMovementComponent = CreateDefaultSubobject<UPlayerMovementComponent>(TEXT("PlayerMovementComponent"));
 
 	CameraComponent->SetupAttachment(RootComponent);
 
-	// Set ABP.
+	// Setting ABP.
 	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("/Game/Custom/Blueprints/ABP_PlayerCharacter.ABP_PlayerCharacter"));
-	GetMesh()->SetAnimInstanceClass(AnimBlueprint.Object->GeneratedClass);
-}
-
-void APlayerCharacter::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	UE_LOG(LogTemp, Warning, TEXT("SAS"));
+	USkeletalMeshComponent* SkeletalMeshComponent = GetMesh();
+	if (SkeletalMeshComponent)
+	{
+		SkeletalMeshComponent->SetAnimInstanceClass(AnimBlueprint.Object->GeneratedClass);
+	}
 }
 
 void APlayerCharacter::OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -66,6 +66,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	// Enhanced input.
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
 	if (PlayerController)
 	{
@@ -81,7 +82,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	{
 		Input->BindAction(DataAsset_IA->JumpAction, ETriggerEvent::Started, this, &APlayerCharacter::PlayerJump);
 		Input->BindAction(DataAsset_IA->MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::PlayerMove);
-		Input->BindAction(DataAsset_IA->PauseAction, ETriggerEvent::Started, this, &APlayerCharacter::Pause);
+		Input->BindAction(DataAsset_IA->PauseAction, ETriggerEvent::Started, this, &APlayerCharacter::BackMenu);
 	}
 }
 
@@ -95,12 +96,13 @@ void APlayerCharacter::PlayerMove(const FInputActionValue& Input)
 	PlayerMovementComponent->PlayerMove(Input);
 }
 
-void APlayerCharacter::Pause()
+void APlayerCharacter::BackMenu()
 {
 	UPlatformerGameInstance* PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (!PlatformerGameInstance)
 	{
 		return;
 	}
+
 	UGameplayStatics::OpenLevel(GetWorld(), PlatformerGameInstance->SlotsLevelName);
 }

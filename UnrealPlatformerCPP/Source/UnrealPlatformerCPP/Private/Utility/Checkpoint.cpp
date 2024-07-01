@@ -17,13 +17,17 @@ ACheckpoint::ACheckpoint()
 		SaveTrigger->OnComponentBeginOverlap.AddDynamic(this, &ACheckpoint::OnBoxTriggered);
 
 		SaveTrigger->SetupAttachment(RootComponent);
-		SaveTrigger->bHiddenInGame = false;
 	}
 
 	FlagMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("FlagMesh"));
 	if (FlagMesh)
 	{
-		USkeletalMesh* Flag = LoadObject<USkeletalMesh>(nullptr, TEXT("/Game/Custom/Meshes/Flags/Checkpoint_Flag/Checkpoint_Flag.Checkpoint_Flag"));
+		USkeletalMesh* Flag = LoadObject<USkeletalMesh>(nullptr, CheckpointMeshPath);
+		if (!Flag)
+		{
+			return;
+		}
+
 		FlagMesh->SetSkeletalMesh(Flag);
 
 		FlagMesh->SetupAttachment(RootComponent);
@@ -53,32 +57,37 @@ void ACheckpoint::Tick(float DeltaTime)
 
 void ACheckpoint::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!CurrentState)
+	if (!bCurrentState)
 	{
 		return;
 	}
+
 	UPlatformerGameInstance* PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (PlatformerGameInstance)
+	if (!PlatformerGameInstance)
 	{
-		FString SlotName = UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex());
-		if (PlatformerGameInstance->SaveGame(GetWorld(), SlotName, 0))
-		{
-			ToggleFlagState(false);
-		}
+		return;
 	}
+
+	const FString& SlotName = UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex());
+	if (!PlatformerGameInstance->SaveGame(GetWorld(), SlotName, 0))
+	{
+		return;
+	}
+		
+	ToggleFlagState(false);
 }
 
-void ACheckpoint::ToggleFlagState(bool State)
+void ACheckpoint::ToggleFlagState(const bool bState)
 {
-	CurrentState = State;
-	if (CurrentState)
+	bCurrentState = bState;
+	if (bCurrentState)
 	{
-		UMaterial* Material = LoadObject<UMaterial>(nullptr, TEXT("/Game/Custom/Materials/M_Green.M_Green"));
+		UMaterial* Material = LoadObject<UMaterial>(nullptr, GreenMaterialPath);
 		FlagMesh->SetMaterial(1, Material);
 	}
 	else
 	{
-		UMaterial* Material = LoadObject<UMaterial>(nullptr, TEXT("/Game/Custom/Materials/M_Red.M_Red"));
+		UMaterial* Material = LoadObject<UMaterial>(nullptr, RedMaterialPath);
 		FlagMesh->SetMaterial(1, Material);
 	}
 }

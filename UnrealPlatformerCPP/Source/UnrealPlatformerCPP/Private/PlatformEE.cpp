@@ -4,6 +4,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 #include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "PlayerCharacter.h"
+#include "Camera/CameraComponent.h"
 
 APlatformEE::APlatformEE()
 {
@@ -80,9 +82,10 @@ void APlatformEE::ToggleScore(int32 Score)
 			if (MainLevelScriptActor)
 			{
 				MainLevelScriptActor->SetScoreOnUI(PlayerCharacterState->GetCurrentScore());
+
+				// Apply Post processing red tint into camera.
+				MainLevelScriptActor->SetPPWeight(1);
 			}
 		}
 	}
-
-	// Apply Post processing red tint into camera.
 }

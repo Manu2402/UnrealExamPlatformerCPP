@@ -18,6 +18,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
 	int32 CurrentPoints;
+
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	float PPWeight;
 };
 
 UCLASS()

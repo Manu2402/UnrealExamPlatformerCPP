@@ -20,19 +20,26 @@ class UNREALPLATFORMERCPP_API UPlatformerGameInstance : public UGameInstance
 private:	
 	ESlotsIndex CurrentSlotIndex;
 
+	class ACharacter* Character;
+	class APlayerCharacterState* PlayerCharacterState;
+	class AMainLevelScriptActor* MainLevelScriptActor;
+
+	class UPlatformerSaveGame* PlatformerSaveGame;
+	class UBestScoreSaveGame* BestScoreSaveGame;
+
+	const FString& BestScoreSlotName = TEXT("BestScoreSlot");
+
 public:
 	const FName& MainLevelName = TEXT("Main");
 	const FName& SlotsLevelName = TEXT("SlotsLevel");
 
-	const FString& BestScoreSlotName = TEXT("BestScoreSlot");
+	bool SaveGame(UWorld* World, const FString& SlotName, int32 UserIndex);
+	bool LoadGame(UWorld* World, const FString& SlotName, int32 UserIndex);
+	bool EndGame(const FString& SlotName, int32 UserIndex);
 
-	bool SaveGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
-	bool LoadGame(UWorld* World, const FString& SlotName, const int32 UserIndex);
-	bool EndGame(const FString& SlotName, const int32 UserIndex);
-
-	bool SaveBestScore(UWorld* World, const int32& UserIndex);
-	bool LoadBestScore(UWorld* World, const int32& UserIndex);
+	bool SaveBestScore(UWorld* World, int32 UserIndex);
+	bool LoadBestScore(UWorld* World, int32 UserIndex);
 
 	ESlotsIndex GetCurrentSlotIndex() const;
-	void SetCurrentSlotIndex(ESlotsIndex SlotIndex);
+	void SetCurrentSlotIndex(const ESlotsIndex& SlotIndex);
 };

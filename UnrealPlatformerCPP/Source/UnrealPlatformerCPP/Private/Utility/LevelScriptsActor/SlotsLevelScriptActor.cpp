@@ -1,27 +1,31 @@
 #include "Utility/LevelScriptsActor/SlotsLevelScriptActor.h"
-#include "Widgets/SlotsWidget.h"
-#include "Kismet/GameplayStatics.h"
 #include "PlayerCharacterController.h"
+#include "Kismet/GameplayStatics.h"
+#include "Widgets/SlotsWidget.h"
 
 void ASlotsLevelScriptActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	World = GetWorld();
+	PlayerCharacterController = Cast<APlayerCharacterController>(UGameplayStatics::GetPlayerController(World, 0));
+	
 	InitSlotsWidget();
 }
 
 void ASlotsLevelScriptActor::InitSlotsWidget()
 {
-	SlotsWidgetClass = LoadClass<USlotsWidget>(nullptr, TEXT("/Game/Custom/Widgets/WBP_SlotsWidget.WBP_SlotsWidget_C"));
-	SlotsWidgetInstance = CreateWidget<USlotsWidget>(UGameplayStatics::GetPlayerController(GetWorld(), 0), SlotsWidgetClass);
+	SlotsWidgetClass = LoadClass<USlotsWidget>(nullptr, SlotsWidgetPath);
+	SlotsWidgetInstance = CreateWidget<USlotsWidget>(PlayerCharacterController, SlotsWidgetClass);
 	if (SlotsWidgetInstance)
 	{
 		SlotsWidgetInstance->AddToViewport();
 	}
 
-	APlayerCharacterController* PlayerCharacterController = Cast<APlayerCharacterController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	if (PlayerCharacterController)
+	if (!PlayerCharacterController)
 	{
-		PlayerCharacterController->ToggleInputMode(InputMode);
+		return;
 	}
+		
+	PlayerCharacterController->ToggleInputMode(InputMode);
 }
