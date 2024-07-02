@@ -19,9 +19,11 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	void SetState(bool value);
+	void SetState(const bool Value);
 
 private:
+	const TCHAR* TubeMeshPath = TEXT("/Game/Custom/Meshes/Tube/Tube.Tube");
+
 	const FVector& TriggerExtendParams = FVector(45, 45, 32);
 	const FVector& TriggerPosition = FVector(0, 0, -36);
 	const FName& PlayerTag = TEXT("Player");
@@ -31,7 +33,7 @@ private:
 	class UStaticMeshComponent* TubeMeshComponent;
 	class UStaticMesh* TubeMesh;
 
-	bool State = true;
+	bool bIsActive = true;
 
 	UPROPERTY(EditInstanceOnly)
 	ATube* TeleportTube;

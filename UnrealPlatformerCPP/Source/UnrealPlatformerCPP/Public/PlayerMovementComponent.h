@@ -20,10 +20,15 @@ class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementCompone
 	GENERATED_BODY()
 	
 private:
-	const FVector Gravity = FVector(0, 0, -9.81f);
-	const FVector DefaultSphereOffset = FVector(0, 0, -90);
-	const float DefaultSphereRadius = 15;
-	const float ZScaleMax = 30;
+	const FName& MovementIgnoredTagName = TEXT("MovementIgnored");
+
+	const FVector& Gravity = FVector(0, 0, -9.81f);
+	const FVector& DefaultSphereOffset = FVector(0, 0, -90);
+	const FQuat& OffsetRotation = FQuat(FRotator(0.f, 180.f, 0.f));
+	const float& DefaultSphereRadius = 15;
+	const float& ZScaleMax = 30;
+
+	class USkeletalMeshComponent* SkeletalMesh;
 
 	// Flip look at.
 	bool bPreviousSign;
@@ -54,8 +59,6 @@ public:
 	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void PlayerJump();
-
 	void PlayerMove(const struct FInputActionValue& Input);
-
 	void AbilityToMoveOnY(bool Value);
 };

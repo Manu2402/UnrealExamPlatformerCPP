@@ -10,11 +10,12 @@ class UNREALPLATFORMERCPP_API USlotsWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	// Called when added to viewport.
 	virtual void NativeConstruct() override;
 	
 private:
 	class UPlatformerGameInstance* PlatformerGameInstance;
+
+	UWorld* World = GetWorld();
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* SlotZero;
@@ -25,6 +26,8 @@ private:
 	UPROPERTY(EditAnywhere, meta = (BindWidget))
 	class UButton* SlotTwo;
 	
+	void LoadLevel() const;
+
 	UFUNCTION()
 	void InitSlotZero();
 
@@ -34,5 +37,4 @@ private:
 	UFUNCTION()
 	void InitSlotTwo();
 
-	void LoadLevel();
 };

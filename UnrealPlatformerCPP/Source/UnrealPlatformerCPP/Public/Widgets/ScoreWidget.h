@@ -10,14 +10,15 @@ class UNREALPLATFORMERCPP_API UScoreWidget : public UUserWidget
 	GENERATED_BODY()
 
 protected:
-	// Called when added to viewport.
 	virtual void NativeConstruct() override;
 
 public:
-	void SetScore(int32 Score);
-	void SetBestScore(int32 Score);
+	void SetScore(const int32 Score);
+	void SetBestScore(const int32 Score);
 
 private:
+	UWorld* World = GetWorld();
+
 	const FText& VoidBestScore = FText::FromString(TEXT("###"));
 
 	UPROPERTY(EditAnywhere, meta = (BindWidget))

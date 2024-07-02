@@ -54,6 +54,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	World = GetWorld();
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -68,22 +69,28 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	// Enhanced input.
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
-	if (PlayerController)
+	if (!PlayerController)
 	{
-		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-		if (Subsystem)
-		{
-			Subsystem->AddMappingContext(InputMappingContext, 0);
-		}
+		return;
 	}
 
-	UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
-	if (Input)
+	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+	if (!Subsystem)
 	{
-		Input->BindAction(DataAsset_IA->JumpAction, ETriggerEvent::Started, this, &APlayerCharacter::PlayerJump);
-		Input->BindAction(DataAsset_IA->MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::PlayerMove);
-		Input->BindAction(DataAsset_IA->PauseAction, ETriggerEvent::Started, this, &APlayerCharacter::BackMenu);
+		return;
 	}
+
+	Subsystem->AddMappingContext(InputMappingContext, 0);
+
+	UEnhancedInputComponent* Input = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
+	if (!Input)
+	{
+		return;
+	}
+
+	Input->BindAction(DataAsset_IA->JumpAction, ETriggerEvent::Started, this, &APlayerCharacter::PlayerJump);
+	Input->BindAction(DataAsset_IA->MoveAction, ETriggerEvent::Triggered, this, &APlayerCharacter::PlayerMove);
+	Input->BindAction(DataAsset_IA->PauseAction, ETriggerEvent::Started, this, &APlayerCharacter::BackMenu);
 }
 
 void APlayerCharacter::PlayerJump()

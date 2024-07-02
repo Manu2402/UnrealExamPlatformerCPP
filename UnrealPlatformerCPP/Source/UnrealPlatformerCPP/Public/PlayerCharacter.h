@@ -18,6 +18,8 @@ class UNREALPLATFORMERCPP_API APlayerCharacter : public ACharacter
 public:
 	APlayerCharacter();
 
+	UWorld* World;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UCameraComponent* CameraComponent;
 

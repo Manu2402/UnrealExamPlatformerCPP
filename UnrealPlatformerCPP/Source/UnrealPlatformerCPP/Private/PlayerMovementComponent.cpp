@@ -14,23 +14,32 @@ void UPlayerMovementComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = Cast<ACharacter>(GetOwner());
-	if (Owner)
+	if (!Owner)
 	{
-		USkeletalMeshComponent* SkeletalMesh = Owner->GetMesh();
-		if (SkeletalMesh)
-		{
-			// Setting initial forward.
-			bPreviousSign = SkeletalMesh->GetRightVector().Y > 0;
-		}
+		return;
 	}
+
+	SkeletalMesh = Owner->GetMesh();
+	if (!SkeletalMesh)
+	{
+		return;
+	}
+
+	// Setting initial forward.
+	bPreviousSign = SkeletalMesh->GetRightVector().Y > 0;
 }
 
 void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	Owner = Cast<ACharacter>(GetOwner());
 	if (!Owner)
+	{
+		return;
+	}
+
+	SkeletalMesh = Owner->GetMesh();
+	if (!SkeletalMesh)
 	{
 		return;
 	}
@@ -70,27 +79,25 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 
 	if (!SafeMoveUpdatedComponent(Velocity * DeltaTime, FRotator::ZeroRotator, true, HitResult))
 	{
-		GetOwner()->AddActorWorldOffset(-HitResult.ImpactNormal);
-		
-		if (!HitResult.GetActor()->ActorHasTag("MovementIgnored"))
+		Owner->AddActorWorldOffset(-HitResult.ImpactNormal);
+
+		// Check about platform collisions.
+		if (HitResult.Normal.Z > 0.8)
 		{
-			if (HitResult.Normal.Z > 0.8)
-			{
-				Velocity.Z = 0;
-				bIsGrounded = true;
-			}
+			Velocity.Z = 0;
+			bIsGrounded = true;
+		}
 
-			if (HitResult.Normal.Y < 0)
-			{
-				Velocity.Y = 0;
-				bCanMoveOnYAxisForward = false;
-			}
+		if (HitResult.Normal.Y < 0)
+		{
+			Velocity.Y = 0;
+			bCanMoveOnYAxisForward = false;
+		}
 
-			if (HitResult.Normal.Y > 0)
-			{
-				Velocity.Y = 0;
-				bCanMoveOnYAxisBackward = false;
-			}
+		if (HitResult.Normal.Y > 0)
+		{
+			Velocity.Y = 0;
+			bCanMoveOnYAxisBackward = false;
 		}
 	}
 
@@ -117,7 +124,7 @@ void UPlayerMovementComponent::PlayerMove(const FInputActionValue& Input)
 
 	if (bPreviousSign != bCurrentSign)
 	{
-		Owner->GetMesh()->AddWorldRotation(FQuat(FRotator(0.f, 180.f, 0.f)));
+		SkeletalMesh->AddWorldRotation(OffsetRotation);
 	}
 
 	if (!bCanMoveOnYAxisForward && MoveDirection.Y > 0)

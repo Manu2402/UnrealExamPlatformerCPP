@@ -4,7 +4,6 @@
 #include "GameFramework/PlayerState.h"
 #include "PlayerCharacterState.generated.h"
 
-
 UCLASS()
 class UNREALPLATFORMERCPP_API APlayerCharacterState : public APlayerState
 {

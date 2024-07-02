@@ -7,6 +7,7 @@ void USlotsWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	// Bind button events.
 	if (SlotZero)
 	{
 		SlotZero->OnClicked.AddDynamic(this, &USlotsWidget::InitSlotZero);
@@ -22,7 +23,7 @@ void USlotsWidget::NativeConstruct()
 		SlotTwo->OnClicked.AddDynamic(this, &USlotsWidget::InitSlotTwo);
 	}
 
-	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(GetWorld());
+	UGameInstance* GameInstance = UGameplayStatics::GetGameInstance(World);
 	PlatformerGameInstance = Cast<UPlatformerGameInstance>(GameInstance);
 }
 
@@ -44,8 +45,7 @@ void USlotsWidget::InitSlotTwo()
 	LoadLevel();
 }
 
-void USlotsWidget::LoadLevel()
+void USlotsWidget::LoadLevel() const
 {
-	FString SlotName = UEnum::GetValueAsString(PlatformerGameInstance->GetCurrentSlotIndex());
-	UGameplayStatics::OpenLevel(GetWorld(), PlatformerGameInstance->MainLevelName);
+	UGameplayStatics::OpenLevel(World, PlatformerGameInstance->MainLevelName);
 }

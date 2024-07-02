@@ -17,7 +17,7 @@ ATube::ATube()
 		TeleportTrigger->SetupAttachment(RootComponent);
 	}
 
-	TubeMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Game/Custom/Meshes/Tube/Tube.Tube"));
+	TubeMesh = LoadObject<UStaticMesh>(nullptr, TubeMeshPath);
 	TubeMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TubeMeshComponent"));
 	if (TubeMeshComponent)
 	{
@@ -41,14 +41,14 @@ void ATube::Tick(float DeltaTime)
 
 }
 
-void ATube::SetState(bool value)
+void ATube::SetState(const bool Value)
 {
-	State = value;
+	bIsActive = Value;
 }
 
 void ATube::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!State)
+	if (!bIsActive)
 	{
 		return;
 	}
@@ -60,10 +60,10 @@ void ATube::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 
 	TeleportTube->SetState(false);
 	OtherActor->SetActorLocation(TeleportTube->GetActorLocation());
-	State = false;
+	SetState(false);
 }
 
 void ATube::OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	State = true;
+	SetState(true);
 }

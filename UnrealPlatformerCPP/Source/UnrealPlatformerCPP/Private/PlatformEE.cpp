@@ -1,17 +1,12 @@
 #include "PlatformEE.h"
-#include "Components/BoxComponent.h"
-#include "PlayerCharacterState.h"
-#include "Kismet/GameplayStatics.h"
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
-#include "Utility/Subsystems/PlatformerGameInstance.h"
-#include "PlayerCharacter.h"
-#include "Camera/CameraComponent.h"
+#include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "PlayerCharacterState.h"
 
 APlatformEE::APlatformEE()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
-	Tags.Add("MovementIgnored");
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
@@ -23,32 +18,40 @@ APlatformEE::APlatformEE()
 		TriggerCollider->OnComponentBeginOverlap.AddDynamic(this, &APlatformEE::OnBoxTriggered);
 
 		TriggerCollider->SetupAttachment(RootComponent);
-		TriggerCollider->bHiddenInGame = false;
 	}
 
 	PlatformMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PlatformMesh"));
-	if (PlatformMeshComponent)
+	if (!PlatformMeshComponent)
 	{
-		UStaticMesh* PlatformMesh = LoadObject<UStaticMesh>(nullptr, TEXT("/Engine/BasicShapes/Cube.Cube"));
-		if (PlatformMesh)
-		{
-			UMaterial* Material = LoadObject<UMaterial>(nullptr, TEXT("/Game/Custom/Materials/M_Gray.M_Gray"));
-			if (Material)
-			{
-				PlatformMeshComponent->SetStaticMesh(PlatformMesh);
-				PlatformMeshComponent->SetWorldScale3D(MeshScaleParams);
-
-				PlatformMesh->SetMaterial(0, Material);
-				PlatformMeshComponent->SetupAttachment(RootComponent);
-			}
-		}
+		return;
 	}
+
+	UStaticMesh* PlatformMesh = LoadObject<UStaticMesh>(nullptr, CubeMeshPath);
+	if (!PlatformMesh)
+	{
+		return;
+	}
+
+	UMaterial* Material = LoadObject<UMaterial>(nullptr, GrayMaterialPath);
+	if (!Material)
+	{
+		return;
+	}
+
+	PlatformMeshComponent->SetStaticMesh(PlatformMesh);
+	PlatformMeshComponent->SetWorldScale3D(MeshScaleParams);
+
+	PlatformMesh->SetMaterial(0, Material);
+
+	PlatformMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	PlatformMeshComponent->SetupAttachment(RootComponent);
 }
 
 void APlatformEE::BeginPlay()
 {
 	Super::BeginPlay();
 
+	World = GetWorld();
 }
 
 void APlatformEE::Tick(float DeltaTime)
@@ -65,27 +68,33 @@ void APlatformEE::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	}
 
 	bIsActive = false;
-	ToggleScore(666);
+	ToggleScore(PlatformEEScore);
 }
 
-void APlatformEE::ToggleScore(int32 Score)
+void APlatformEE::ToggleScore(const int32& Score)
 {
-	APlayerCharacterState* PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(GetWorld(), 0));
-	if (PlayerCharacterState)
+	PlayerCharacterState = Cast<APlayerCharacterState>(UGameplayStatics::GetPlayerState(World, 0));
+	if (!PlayerCharacterState)
 	{
-		PlayerCharacterState->SetCurrentScore(Score);
-
-		ULevel* CurrentLevel = GetWorld()->GetCurrentLevel();
-		if (CurrentLevel)
-		{
-			AMainLevelScriptActor* MainLevelScriptActor = Cast<AMainLevelScriptActor>(CurrentLevel->GetLevelScriptActor());
-			if (MainLevelScriptActor)
-			{
-				MainLevelScriptActor->SetScoreOnUI(PlayerCharacterState->GetCurrentScore());
-
-				// Apply Post processing red tint into camera.
-				MainLevelScriptActor->SetPPWeight(1);
-			}
-		}
+		return;
 	}
+
+	PlayerCharacterState->SetCurrentScore(Score);
+
+	CurrentLevel = World->GetCurrentLevel();
+	if (!CurrentLevel)
+	{
+		return;
+	}
+
+	MainLevelScriptActor = Cast<AMainLevelScriptActor>(CurrentLevel->GetLevelScriptActor());
+	if (!MainLevelScriptActor)
+	{
+		return;
+	}
+
+	MainLevelScriptActor->SetScoreOnUI(PlayerCharacterState->GetCurrentScore());
+
+	// Apply Post processing red tint into camera.
+	MainLevelScriptActor->SetPPWeight(1);
 }
