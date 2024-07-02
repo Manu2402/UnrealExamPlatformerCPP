@@ -25,6 +25,7 @@ private:
 	class UCameraComponent* CameraComponent;
 	class APlayerCharacterController* PlayerCharacterController;
 	class UPlatformerGameInstance* PlatformerGameInstance;
+	class UTubeManagerSubsystem* TubeManager;
 
 	// Weight about "vignette" shader.
 	float PPWeight;

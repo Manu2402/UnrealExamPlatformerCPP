@@ -20,8 +20,6 @@ class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementCompone
 	GENERATED_BODY()
 	
 private:
-	const FName& MovementIgnoredTagName = TEXT("MovementIgnored");
-
 	const FVector& Gravity = FVector(0, 0, -9.81f);
 	const FVector& DefaultSphereOffset = FVector(0, 0, -90);
 	const FQuat& OffsetRotation = FQuat(FRotator(0.f, 180.f, 0.f));

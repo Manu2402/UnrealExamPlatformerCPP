@@ -1,5 +1,6 @@
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 #include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Utility/Subsystems/TubeManagerSubsystem.h"
 #include "PlayerCharacterController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
@@ -33,6 +34,12 @@ void AMainLevelScriptActor::BeginPlay()
 	// Getting references.
 	PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(World, 0));
 	CameraComponent = PlayerCharacter->CameraComponent;
+
+	TubeManager = PlatformerGameInstance->GetSubsystem<UTubeManagerSubsystem>();
+	if (TubeManager)
+	{
+		TubeManager->GetAllTubes();
+	}
 
 	LoadSaves();
 }

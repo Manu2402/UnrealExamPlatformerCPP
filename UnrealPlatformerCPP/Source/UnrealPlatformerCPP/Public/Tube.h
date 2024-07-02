@@ -33,7 +33,8 @@ private:
 	class UStaticMeshComponent* TubeMeshComponent;
 	class UStaticMesh* TubeMesh;
 
-	bool bIsActive = true;
+	UPROPERTY(EditInstanceOnly)
+	bool bIsActive;
 
 	UPROPERTY(EditInstanceOnly)
 	ATube* TeleportTube;
