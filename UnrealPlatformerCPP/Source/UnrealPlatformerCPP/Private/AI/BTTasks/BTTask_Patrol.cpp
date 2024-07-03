@@ -59,8 +59,8 @@ void UBTTask_Patrol::TickTask(UBehaviorTreeComponent& OwnerComponent, uint8* Nod
 
 }
 
-bool UBTTask_Patrol::HasReachedTarget(const AEnemy* Enemy, const FVector& PatrolLocation, const float AcceptanceRadius)
+bool UBTTask_Patrol::HasReachedTarget(const AEnemy* Enemy, const FVector& PatrolLocation, const float& AcceptanceRadiusParam)
 {
 	FVector EnemyLocation = Enemy->GetActorLocation();
-	return FVector::Distance(EnemyLocation, PatrolLocation) < AcceptanceRadius;
+	return FVector::Distance(EnemyLocation, PatrolLocation) < AcceptanceRadiusParam;
 }
