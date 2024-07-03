@@ -15,12 +15,15 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 
 	AEnemy* Enemy = Cast<AEnemy>(InPawn);
 
-	if (!Enemy && !Enemy->BehaviorTreeAsset)
+	if (!Enemy || !Enemy->BehaviorTreeAsset)
 	{
 		return;
 	}
 
 	BBC->InitializeBlackboard(*Enemy->BehaviorTreeAsset->BlackboardAsset);
 	TargetActor = BBC->GetKeyID(TargetActorName);
+
+	RunBehaviorTree(Enemy->BehaviorTreeAsset);
+
 	BTC->StartTree(*Enemy->BehaviorTreeAsset);
 }

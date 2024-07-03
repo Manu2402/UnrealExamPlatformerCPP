@@ -10,7 +10,8 @@
 UBTTask_Patrol::UBTTask_Patrol()
 {
 	bCreateNodeInstance = true;
-	NodeName = "Patrol";
+	bNotifyTick = true;
+	NodeName = TEXT("Patrol");
 }
 
 EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerComponent, uint8* NodeMemory)
@@ -51,14 +52,15 @@ void UBTTask_Patrol::TickTask(UBehaviorTreeComponent& OwnerComponent, uint8* Nod
 
 	FVector PatrolLocation = BlackboardComponent->GetValueAsVector(TargetPatrolLocationName);
 
-	if (HasReachedTarget(Enemy, PatrolLocation, 2))
+	if (HasReachedTarget(Enemy, PatrolLocation, 100))
 	{
 		FinishLatentTask(OwnerComponent, EBTNodeResult::Succeeded);
 	}
+
 }
 
-bool UBTTask_Patrol::HasReachedTarget(const APawn* Enemy, const FVector& TargetLocation, const float& AcceptanceRadius)
+bool UBTTask_Patrol::HasReachedTarget(const AEnemy* Enemy, const FVector& PatrolLocation, const float AcceptanceRadius)
 {
 	FVector EnemyLocation = Enemy->GetActorLocation();
-	return FVector::Distance(EnemyLocation, TargetLocation) < AcceptanceRadius;
+	return FVector::Distance(EnemyLocation, PatrolLocation) < AcceptanceRadius;
 }

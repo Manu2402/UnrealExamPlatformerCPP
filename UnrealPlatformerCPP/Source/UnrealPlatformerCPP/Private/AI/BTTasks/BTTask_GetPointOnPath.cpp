@@ -35,5 +35,6 @@ EBTNodeResult::Type UBTTask_GetPointOnPath::ExecuteTask(UBehaviorTreeComponent& 
 		PointIndex = 0;
 	}
 
+	FinishLatentTask(OwnerComponent, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;
 }

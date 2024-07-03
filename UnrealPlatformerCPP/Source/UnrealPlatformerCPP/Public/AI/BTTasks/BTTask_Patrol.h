@@ -18,6 +18,5 @@ public:
 private:
 	const FName& TargetPatrolLocationName = TEXT("TargetPatrolLocation");
 
-	bool HasReachedTarget(const APawn* Enemy, const FVector& TargetLocation, const float& AcceptanceRadius);
-
+	bool HasReachedTarget(const class AEnemy* Enemy, const FVector& PatrolLocation, const float AcceptanceRadius);
 };

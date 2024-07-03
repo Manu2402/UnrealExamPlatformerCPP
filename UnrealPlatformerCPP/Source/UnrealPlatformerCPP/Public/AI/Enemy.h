@@ -1,11 +1,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
+#include "GameFramework/Character.h"
 #include "Enemy.generated.h"
 
 UCLASS()
-class UNREALPLATFORMERCPP_API AEnemy : public APawn
+class UNREALPLATFORMERCPP_API AEnemy : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -25,8 +25,5 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-private:
-
 
 };
