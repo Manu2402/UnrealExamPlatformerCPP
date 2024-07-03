@@ -12,6 +12,10 @@ class UNREALPLATFORMERCPP_API AEnemy : public ACharacter
 public:
 	AEnemy();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy")
+	class UBoxComponent* DamageCollider;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
 	class UBehaviorTree* BehaviorTreeAsset;
 
@@ -25,5 +29,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+private:
+	const TCHAR* SkeletalMeshPath = TEXT("/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin");
+	const FName& DamageSocketString = TEXT("DamageSocket");
+
+	USkeletalMeshComponent* SkeletalMeshComponent;
 
 };
