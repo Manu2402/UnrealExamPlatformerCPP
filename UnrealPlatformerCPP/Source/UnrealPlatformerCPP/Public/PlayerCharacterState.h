@@ -14,6 +14,7 @@ public:
 
 	int32 GetCurrentScore() const;
 	void SetCurrentScore(const int32& NewScore);
+	void RemoveScore(const int32& ScoreToRemove);
 	bool Losing() const;
 
 	int32 GetBestScore() const;

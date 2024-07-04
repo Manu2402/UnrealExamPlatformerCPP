@@ -41,14 +41,24 @@ void ATube::Tick(float DeltaTime)
 
 }
 
-void ATube::SetState(const bool Value)
+void ATube::SetActive(const bool Value)
 {
 	bIsActive = Value;
 }
 
-void ATube::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+void ATube::SetEnable(const bool Value)
 {
 	if (!bIsActive)
+	{
+		return;
+	}
+
+	bIsEnabled = Value;
+}
+
+void ATube::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (!bIsActive || !bIsEnabled)
 	{
 		return;
 	}
@@ -58,12 +68,12 @@ void ATube::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherAct
 		return;
 	}
 
-	TeleportTube->SetState(false);
+	TeleportTube->SetEnable(false);
 	OtherActor->SetActorLocation(TeleportTube->GetActorLocation());
-	SetState(false);
+	SetEnable(false);
 }
 
 void ATube::OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	SetState(true);
+	SetEnable(true);
 }

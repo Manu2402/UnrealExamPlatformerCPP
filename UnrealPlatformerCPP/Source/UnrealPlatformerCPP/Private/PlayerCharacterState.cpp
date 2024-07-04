@@ -16,6 +16,11 @@ void APlayerCharacterState::SetCurrentScore(const int32& NewScore)
 	CurrentScore = NewScore > 0 ? NewScore : 0;
 }
 
+void APlayerCharacterState::RemoveScore(const int32& ScoreToRemove)
+{
+	CurrentScore -= ScoreToRemove;
+}
+
 bool APlayerCharacterState::Losing() const
 {
 	return CurrentScore <= 0;

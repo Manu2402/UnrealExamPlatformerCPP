@@ -82,19 +82,19 @@ void UPlayerMovementComponent::TickComponent(float DeltaTime, ELevelTick TickTyp
 		Owner->AddActorWorldOffset(-HitResult.ImpactNormal);
 
 		// Check about platform collisions.
-		if (HitResult.Normal.Z > 0.8)
+		if (HitResult.Normal.Z > HitNormalValue)
 		{
 			Velocity.Z = 0;
 			bIsGrounded = true;
 		}
 
-		if (HitResult.Normal.Y < 0)
+		if (HitResult.Normal.Y < -HitNormalValue)
 		{
 			Velocity.Y = 0;
 			bCanMoveOnYAxisForward = false;
 		}
 
-		if (HitResult.Normal.Y > 0)
+		if (HitResult.Normal.Y > HitNormalValue)
 		{
 			Velocity.Y = 0;
 			bCanMoveOnYAxisBackward = false;

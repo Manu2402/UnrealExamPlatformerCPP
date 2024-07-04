@@ -6,6 +6,7 @@ TArray<ATube*> UTubeManagerSubsystem::GetAllTubes()
 {
 	World = GetWorld();
 
+	Tubes.Empty();
 	TArray<AActor*> OutTubes;
 	UGameplayStatics::GetAllActorsOfClass(World, ATube::StaticClass(), OutTubes);
 
@@ -14,8 +15,8 @@ TArray<ATube*> UTubeManagerSubsystem::GetAllTubes()
 		ATube* CurrentTube = Cast<ATube>(Tube);
 		if (!CurrentTube)
 		{
-			return TArray<ATube*>();
 			UE_LOG(LogTemp, Error, TEXT("Error: unless a tube isn't found!"));
+			return TArray<ATube*>();
 		}
 
 		Tubes.Add(CurrentTube);
@@ -33,6 +34,6 @@ void UTubeManagerSubsystem::ToggleTubeQuestState(const FName& TubeQuestStateStri
 			continue;
 		}
 
-		Tube->SetState(bState);
+		Tube->SetActive(bState);
 	}
 }

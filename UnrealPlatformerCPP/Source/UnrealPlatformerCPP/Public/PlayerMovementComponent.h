@@ -25,6 +25,7 @@ private:
 	const FQuat& OffsetRotation = FQuat(FRotator(0.f, 180.f, 0.f));
 	const float& DefaultSphereRadius = 15;
 	const float& ZScaleMax = 30;
+	const float& HitNormalValue = 0.8f;
 
 	class USkeletalMeshComponent* SkeletalMesh;
 
@@ -58,5 +59,6 @@ public:
 
 	void PlayerJump();
 	void PlayerMove(const struct FInputActionValue& Input);
+
 	void AbilityToMoveOnY(bool Value);
 };

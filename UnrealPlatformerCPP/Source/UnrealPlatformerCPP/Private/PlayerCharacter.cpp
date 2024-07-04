@@ -6,6 +6,8 @@
 #include "Components/BoxComponent.h"
 #include "Utility/Subsystems/PlatformerGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "PlayerCharacterState.h"
+#include "AI/Enemy.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -20,16 +22,17 @@ APlayerCharacter::APlayerCharacter()
 		CameraComponent->SetWorldLocation(GetActorLocation() - CameraOffset);
 	}
 
-	MovementCheckCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("MovementCheckCollider"));
-	if (MovementCheckCollider)
+	PlayerCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("PlayerCollider"));
+	if (PlayerCollider)
 	{
-		MovementCheckCollider->SetBoxExtent(MovementCheckBoxExtents);
+		PlayerCollider->SetBoxExtent(MovementCheckBoxExtents);
 
-		MovementCheckCollider->bHiddenInGame = false;
-		MovementCheckCollider->SetupAttachment(RootComponent);
+		PlayerCollider->bHiddenInGame = false;
+		PlayerCollider->SetupAttachment(RootComponent);
 
 		// Collider overlap events.
-		MovementCheckCollider->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnBoxExitTrigger);
+		PlayerCollider->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnBoxExitTrigger);
+		PlayerCollider->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnCapsuleHit);
 	}
 
 	PlayerMovementComponent = CreateDefaultSubobject<UPlayerMovementComponent>(TEXT("PlayerMovementComponent"));
@@ -43,11 +46,29 @@ APlayerCharacter::APlayerCharacter()
 	{
 		SkeletalMeshComponent->SetAnimInstanceClass(AnimBlueprint.Object->GeneratedClass);
 	}
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnCapsuleHit);
 }
 
 void APlayerCharacter::OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	PlayerMovementComponent->AbilityToMoveOnY(true);
+}
+
+void APlayerCharacter::OnCapsuleHit(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (!OtherActor->ActorHasTag(EnemyTag))
+	{
+		return;
+	}
+
+	AEnemy* Enemy = Cast<AEnemy>(OtherActor);
+	if (!Enemy)
+	{
+		return;
+	}
+
+	Enemy->ToggleScore(Enemy->EnemyScoreToSubtract);
 }
 
 void APlayerCharacter::BeginPlay()

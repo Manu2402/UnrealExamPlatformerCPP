@@ -12,14 +12,14 @@ class UNREALPLATFORMERCPP_API ATube : public AActor
 public:	
 	ATube();
 
-
 protected:
 	virtual void BeginPlay() override;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	void SetState(const bool Value);
+	void SetActive(const bool Value);
+	void SetEnable(const bool Value);
 
 private:
 	const TCHAR* TubeMeshPath = TEXT("/Game/Custom/Meshes/Tube/Tube.Tube");
@@ -34,7 +34,9 @@ private:
 	class UStaticMesh* TubeMesh;
 
 	UPROPERTY(EditInstanceOnly)
-	bool bIsActive;
+	bool bIsActive; // On/Off
+
+	bool bIsEnabled = true; //Active/Disactive (just if the tube is turned on).
 
 	UPROPERTY(EditInstanceOnly)
 	ATube* TeleportTube;
