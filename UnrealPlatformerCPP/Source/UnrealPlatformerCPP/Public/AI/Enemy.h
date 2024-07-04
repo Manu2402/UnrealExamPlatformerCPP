@@ -22,6 +22,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	class ASmartPath* PawnPath;
 
+	const FName& FirstFloorQuestString = TEXT("FirstFloorQuest");
 	const int32& EnemyScoreToSubtract = 25;
 
 protected:
@@ -33,14 +34,17 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void ToggleScore(const int32& Score);
+	bool GetEnemyIsActive() const;
+	void SetEnemyIsActive(bool bisEnemyActive);
 
 private:
 	const TCHAR* SkeletalMeshPath = TEXT("/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin");
 	const FVector& DamageColliderExtent = FVector(5, 5, 5);
 	const FName& DamageSocketString = TEXT("DamageSocket");
-	const FName& FirstFloorQuestString = TEXT("FirstFloorQuest");
 	const FName& PlayerTag = TEXT("Player");
 	const FName& EnemyTag = TEXT("Enemy");
+	
+	bool bIsActive = true;
 
 	UWorld* World;
 	ULevel* CurrentLevel;
@@ -55,6 +59,6 @@ private:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
 
-	void DisableEnemy(const bool bValue);
+	void EnableEnemy(const bool bValue);
 
 };

@@ -50,6 +50,7 @@ TArray<ATube*> UTubeManagerSubsystem::GetAllTubes()
 
 void UTubeManagerSubsystem::ToggleTubeQuestState(const FName& TubeQuestStateString, const bool bState)
 {
+	GetAllTubes();
 	for (ATube* Tube : Tubes)
 	{
 		if (!Tube->ActorHasTag(TubeQuestStateString))

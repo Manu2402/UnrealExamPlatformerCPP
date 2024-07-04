@@ -25,6 +25,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
 	TMap<ATube*, bool> TubesState;
+
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	bool bIsEnemyActive;
 };
 
 UCLASS()

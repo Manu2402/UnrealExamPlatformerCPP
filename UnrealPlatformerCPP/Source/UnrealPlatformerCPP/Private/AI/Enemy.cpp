@@ -23,6 +23,7 @@ AEnemy::AEnemy()
 
 		DamageCollider->bHiddenInGame = false;
 	}
+
 }
 
 void AEnemy::BeginPlay()
@@ -53,16 +54,27 @@ void AEnemy::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 		return;
 	}
 
-	DisableEnemy(true);
+	bIsActive = false;
+	EnableEnemy(bIsActive);
+	TubeManager->ToggleTubeQuestState(FirstFloorQuestString, !bIsActive);
 }
 
-void AEnemy::DisableEnemy(const bool bValue)
+void AEnemy::EnableEnemy(const bool bValue)
 {
-	SetActorHiddenInGame(bValue);
-	SetActorEnableCollision(!bValue);
-	SetActorTickEnabled(!bValue);
+	SetActorHiddenInGame(!bValue);
+	SetActorEnableCollision(bValue);
+	SetActorTickEnabled(bValue);
+}
 
-	TubeManager->ToggleTubeQuestState(FirstFloorQuestString, true);
+bool AEnemy::GetEnemyIsActive() const
+{
+	return bIsActive;
+}
+
+void AEnemy::SetEnemyIsActive(bool bIsEnemyActive)
+{
+	bIsActive = bIsEnemyActive;
+	EnableEnemy(bIsActive);
 }
 
 void AEnemy::ToggleScore(const int32& Score)

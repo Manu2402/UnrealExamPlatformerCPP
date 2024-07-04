@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerCharacterState.h"
 #include "PlayerCharacter.h"
+#include "AI/Enemy.h"
 
 bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, int32 UserIndex)
 {
@@ -45,6 +46,9 @@ bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, i
 	PlatformerSaveGame->SaveData.PPWeight = MainLevelScriptActor->GetPPWeight();
 	PlatformerSaveGame->SaveData.TubesState = TubeManager->GetTubesState();
 
+	AEnemy* Enemy = Cast<AEnemy>(UGameplayStatics::GetActorOfClass(World, AEnemy::StaticClass()));
+	PlatformerSaveGame->SaveData.bIsEnemyActive = Enemy && Enemy->GetEnemyIsActive();
+
 	UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
 	return true;
 }
@@ -83,10 +87,20 @@ bool UPlatformerGameInstance::LoadGame(UWorld* World, const FString& SlotName, i
 
 	Character->SetActorLocation(PlatformerSaveGame->SaveData.CharacterLocation);
 	Character->GetMesh()->SetRelativeRotation(PlatformerSaveGame->SaveData.CharacterRotation);
+
 	PlayerCharacterState->SetCurrentScore(PlatformerSaveGame->SaveData.CurrentPoints);
+	MainLevelScriptActor->SetScoreOnUI(PlayerCharacterState->GetCurrentScore());
+
 	MainLevelScriptActor->SetPPWeight(PlatformerSaveGame->SaveData.PPWeight);
-	TMap<ATube*, bool> Temp = PlatformerSaveGame->SaveData.TubesState;
 	TubeManager->SetTubesState(PlatformerSaveGame->SaveData.TubesState);
+
+	AEnemy* Enemy = Cast<AEnemy>(UGameplayStatics::GetActorOfClass(World, AEnemy::StaticClass()));
+	if (!Enemy)
+	{
+		return false;
+	}
+
+	Enemy->SetEnemyIsActive(PlatformerSaveGame->SaveData.bIsEnemyActive);
 
 	return true;
 }
