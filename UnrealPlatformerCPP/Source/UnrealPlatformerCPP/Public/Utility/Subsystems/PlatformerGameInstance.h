@@ -26,6 +26,7 @@ private:
 
 	class UPlatformerSaveGame* PlatformerSaveGame;
 	class UBestScoreSaveGame* BestScoreSaveGame;
+	class UTubeManagerSubsystem* TubeManager;
 
 	const FString& BestScoreSlotName = TEXT("BestScoreSlot");
 

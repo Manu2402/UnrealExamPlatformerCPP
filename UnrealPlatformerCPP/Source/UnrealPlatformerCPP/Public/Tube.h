@@ -49,4 +49,5 @@ private:
 	UFUNCTION()
 	void OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, 
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 };

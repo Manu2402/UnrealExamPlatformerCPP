@@ -35,13 +35,13 @@ void AMainLevelScriptActor::BeginPlay()
 	PlayerCharacter = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerPawn(World, 0));
 	CameraComponent = PlayerCharacter->CameraComponent;
 
+	LoadSaves();
+
 	TubeManager = PlatformerGameInstance->GetSubsystem<UTubeManagerSubsystem>();
 	if (TubeManager)
 	{
 		TubeManager->GetAllTubes();
 	}
-
-	LoadSaves();
 }
 
 void AMainLevelScriptActor::ToggleInputMode() const
@@ -105,4 +105,11 @@ void AMainLevelScriptActor::SetPostProcessingEffectByWeight(const float& Weight)
 	}
 
 	PlayerCharacter->CameraComponent->PostProcessSettings.WeightedBlendables.Array[0].Weight = Weight;
+}
+
+void AMainLevelScriptActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	TubeManager->ClearTubesState();
 }

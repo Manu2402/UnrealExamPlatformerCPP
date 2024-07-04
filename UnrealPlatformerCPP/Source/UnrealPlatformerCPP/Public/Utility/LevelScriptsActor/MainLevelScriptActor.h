@@ -44,4 +44,6 @@ public:
 
 	void SetPostProcessingEffectByWeight(const float& Weight);
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 };

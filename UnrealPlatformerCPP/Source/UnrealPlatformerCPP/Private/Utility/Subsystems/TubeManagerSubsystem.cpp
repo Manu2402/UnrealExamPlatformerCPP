@@ -2,6 +2,21 @@
 #include "Kismet/GameplayStatics.h"
 #include "Tube.h"
 
+TMap<ATube*, bool> UTubeManagerSubsystem::GetTubesState() const
+{
+	if (TubesState.IsEmpty())
+	{
+		return TMap<ATube*, bool>();
+	}
+
+	return TubesState;
+}
+
+void UTubeManagerSubsystem::SetTubesState(const TMap<ATube*, bool>& NewTubesState)
+{
+	TubesState = NewTubesState;
+}
+
 TArray<ATube*> UTubeManagerSubsystem::GetAllTubes()
 {
 	World = GetWorld();
@@ -22,6 +37,14 @@ TArray<ATube*> UTubeManagerSubsystem::GetAllTubes()
 		Tubes.Add(CurrentTube);
 	}
 
+	for (auto& TubeState : TubesState)
+	{
+		if (Tubes.Contains(TubeState.Key))
+		{
+			TubeState.Key->SetActive(TubesState[TubeState.Key]);
+		}
+	}
+
 	return Tubes;
 }
 
@@ -34,6 +57,12 @@ void UTubeManagerSubsystem::ToggleTubeQuestState(const FName& TubeQuestStateStri
 			continue;
 		}
 
+		TubesState.Add(Tube, bState);
 		Tube->SetActive(bState);
 	}
+}
+
+void UTubeManagerSubsystem::ClearTubesState()
+{
+	TubesState.Empty();
 }

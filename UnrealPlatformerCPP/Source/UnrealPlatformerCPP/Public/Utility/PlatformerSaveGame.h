@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "Tube.h"
 #include "PlatformerSaveGame.generated.h"
 
 USTRUCT(BlueprintType)
@@ -21,6 +22,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
 	float PPWeight;
+
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	TMap<ATube*, bool> TubesState;
 };
 
 UCLASS()

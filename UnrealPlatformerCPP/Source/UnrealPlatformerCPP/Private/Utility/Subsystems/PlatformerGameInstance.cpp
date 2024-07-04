@@ -1,5 +1,6 @@
 #include "Utility/Subsystems/PlatformerGameInstance.h"
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
+#include "Utility/Subsystems/TubeManagerSubsystem.h"
 #include "Utility/PlatformerSaveGame.h"
 #include "Utility/BestScoreSaveGame.h"
 #include "Kismet/GameplayStatics.h"
@@ -32,10 +33,17 @@ bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, i
 		return false;
 	}
 
+	TubeManager = GetSubsystem<UTubeManagerSubsystem>();
+	if (!TubeManager)
+	{
+		return false;
+	}
+
 	PlatformerSaveGame->SaveData.CharacterLocation = Character->GetActorLocation();
 	PlatformerSaveGame->SaveData.CharacterRotation = Character->GetMesh()->GetRelativeRotation();
 	PlatformerSaveGame->SaveData.CurrentPoints = PlayerCharacterState->GetCurrentScore();
 	PlatformerSaveGame->SaveData.PPWeight = MainLevelScriptActor->GetPPWeight();
+	PlatformerSaveGame->SaveData.TubesState = TubeManager->GetTubesState();
 
 	UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
 	return true;
@@ -67,10 +75,18 @@ bool UPlatformerGameInstance::LoadGame(UWorld* World, const FString& SlotName, i
 		return false;
 	}
 
+	TubeManager = GetSubsystem<UTubeManagerSubsystem>();
+	if (!TubeManager)
+	{
+		return false;
+	}
+
 	Character->SetActorLocation(PlatformerSaveGame->SaveData.CharacterLocation);
 	Character->GetMesh()->SetRelativeRotation(PlatformerSaveGame->SaveData.CharacterRotation);
 	PlayerCharacterState->SetCurrentScore(PlatformerSaveGame->SaveData.CurrentPoints);
 	MainLevelScriptActor->SetPPWeight(PlatformerSaveGame->SaveData.PPWeight);
+	TMap<ATube*, bool> Temp = PlatformerSaveGame->SaveData.TubesState;
+	TubeManager->SetTubesState(PlatformerSaveGame->SaveData.TubesState);
 
 	return true;
 }

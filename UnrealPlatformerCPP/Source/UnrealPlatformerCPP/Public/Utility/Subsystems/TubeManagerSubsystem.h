@@ -12,9 +12,14 @@ class UNREALPLATFORMERCPP_API UTubeManagerSubsystem : public UGameInstanceSubsys
 private:
 	UWorld* World;
 	TArray<class ATube*> Tubes;
+	TMap<class ATube*, bool> TubesState;
 
 public:
+	TMap<class ATube*, bool> GetTubesState() const;
+	void SetTubesState(const TMap<class ATube*, bool>& NewTubesState);
+
 	TArray<class ATube*> GetAllTubes();
 	void ToggleTubeQuestState(const FName& TubeQuestStateName, const bool bState);
+	void ClearTubesState();
 	
 };
