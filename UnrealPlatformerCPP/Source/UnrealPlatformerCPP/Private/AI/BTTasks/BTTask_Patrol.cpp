@@ -1,8 +1,6 @@
 #include "AI/BTTasks/BTTask_Patrol.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h" 
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 #include "AI/Enemy.h"
 #include "Utility/SmartPath.h"
 #include "NavigationSystem.h"
@@ -20,10 +18,14 @@ EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	AAIController* EnemyAIController = OwnerComponent.GetAIOwner();
 	AEnemy* Enemy = Cast<AEnemy>(EnemyAIController->GetPawn());
 
+	Enemy->SetMaxWalkSpeed(Enemy->PatrolSpeed);
+
 	if (!BlackboardComponent || !EnemyAIController || !Enemy)
 	{
 		return EBTNodeResult::Failed;
 	}
+
+	BlackboardComponent->SetValueAsObject(TargetActorName, nullptr);
 
 	FVector PatrolLocation = BlackboardComponent->GetValueAsVector(TargetPatrolLocationName);
 
@@ -48,6 +50,7 @@ void UBTTask_Patrol::TickTask(UBehaviorTreeComponent& OwnerComponent, uint8* Nod
 	if (!BlackboardComponent || !EnemyAIController || !Enemy)
 	{
 		FinishLatentTask(OwnerComponent, EBTNodeResult::Failed);
+		return;
 	}
 
 	FVector PatrolLocation = BlackboardComponent->GetValueAsVector(TargetPatrolLocationName);
@@ -55,6 +58,7 @@ void UBTTask_Patrol::TickTask(UBehaviorTreeComponent& OwnerComponent, uint8* Nod
 	if (HasReachedTarget(Enemy, PatrolLocation, 100))
 	{
 		FinishLatentTask(OwnerComponent, EBTNodeResult::Succeeded);
+		return;
 	}
 
 }

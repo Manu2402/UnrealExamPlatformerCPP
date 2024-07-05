@@ -4,10 +4,12 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/BoxComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Utility/Subsystems/PlatformerGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "PlayerCharacterState.h"
 #include "AI/Enemy.h"
+#include "Perception/AISense_Sight.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -40,7 +42,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->SetupAttachment(RootComponent);
 
 	// Setting ABP.
-	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("/Game/Custom/Blueprints/ABP_PlayerCharacter.ABP_PlayerCharacter"));
+	const ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("/Game/Custom/Blueprints/ABP/ABP_PlayerCharacter.ABP_PlayerCharacter"));
 	USkeletalMeshComponent* SkeletalMeshComponent = GetMesh();
 	if (SkeletalMeshComponent)
 	{
@@ -48,6 +50,10 @@ APlayerCharacter::APlayerCharacter()
 	}
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnCapsuleHit);
+
+	PerceptionStimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSourceComponent"));
+	PerceptionStimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
+	PerceptionStimuliSource->RegisterWithPerceptionSystem();
 }
 
 void APlayerCharacter::OnBoxExitTrigger(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

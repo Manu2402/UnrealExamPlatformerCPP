@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PlayerCharacterState.h"
 #include "PlayerCharacter.h"
+#include "PlatformEE.h"
 #include "AI/Enemy.h"
 
 bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, int32 UserIndex)
@@ -48,6 +49,9 @@ bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, i
 
 	AEnemy* Enemy = Cast<AEnemy>(UGameplayStatics::GetActorOfClass(World, AEnemy::StaticClass()));
 	PlatformerSaveGame->SaveData.bIsEnemyActive = Enemy && Enemy->GetEnemyIsActive();
+
+	APlatformEE* Platform = Cast<APlatformEE>(UGameplayStatics::GetActorOfClass(World, APlatformEE::StaticClass()));
+	PlatformerSaveGame->SaveData.bIsPlatformActive = Platform && Platform->GetIsActive();
 
 	UGameplayStatics::SaveGameToSlot(PlatformerSaveGame, SlotName, UserIndex);
 	return true;
@@ -101,6 +105,14 @@ bool UPlatformerGameInstance::LoadGame(UWorld* World, const FString& SlotName, i
 	}
 
 	Enemy->SetEnemyIsActive(PlatformerSaveGame->SaveData.bIsEnemyActive);
+
+	APlatformEE* Platform = Cast<APlatformEE>(UGameplayStatics::GetActorOfClass(World, APlatformEE::StaticClass()));
+	if (!Platform)
+	{
+		return false;
+	}
+	
+	Platform->SetIsActive(PlatformerSaveGame->SaveData.bIsPlatformActive);
 
 	return true;
 }

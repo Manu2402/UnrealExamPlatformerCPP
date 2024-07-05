@@ -2,23 +2,23 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/Tasks/BTTask_BlackboardBase.h"
-#include "BTTask_Patrol.generated.h"
+#include "BTTask_Chase.generated.h"
 
 UCLASS()
-class UNREALPLATFORMERCPP_API UBTTask_Patrol : public UBTTask_BlackboardBase
+class UNREALPLATFORMERCPP_API UBTTask_Chase : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
 
 public:
-	UBTTask_Patrol();
+	UBTTask_Chase();
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComponent, uint8* NodeMemory) override;
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComponent, uint8* NodeMemory, float DeltaTime) override;
 
 private:
-	const FName& TargetPatrolLocationName = TEXT("TargetPatrolLocation");
 	const FName& TargetActorName = TEXT("TargetActor");
 	const float& AcceptanceRadius = 100.f;
 
-	bool HasReachedTarget(const class AEnemy* Enemy, const FVector& PatrolLocation, const float& AcceptanceRadius);
+	bool HasReachedTarget(const class AEnemy* Enemy, const FVector& ActorLocation, const float& AcceptanceRadiusParam);
+
 };

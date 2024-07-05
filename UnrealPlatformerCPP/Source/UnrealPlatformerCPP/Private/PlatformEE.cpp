@@ -60,6 +60,16 @@ void APlatformEE::Tick(float DeltaTime)
 
 }
 
+bool APlatformEE::GetIsActive() const
+{
+	return bIsActive;
+}
+
+void APlatformEE::SetIsActive(bool bValue)
+{
+	bIsActive = bValue;
+}
+
 void APlatformEE::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (!bIsActive)
@@ -97,4 +107,18 @@ void APlatformEE::ToggleScore(const int32& Score)
 
 	// Apply Post processing red tint into camera.
 	MainLevelScriptActor->SetPPWeight(1);
+
+	MakeNoise();
+}
+
+void APlatformEE::MakeNoise() const
+{
+	FSoftObjectPath SoundAssetPath(JumpscareCuePath);
+	USoundBase* JumpscareSound = Cast<USoundBase>(SoundAssetPath.TryLoad());
+	if (!JumpscareSound)
+	{
+		return;
+	}
+
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), JumpscareSound, GetActorLocation());
 }

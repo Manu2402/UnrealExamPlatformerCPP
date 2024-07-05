@@ -14,6 +14,7 @@ public:
 	AEnemyAIController();
 
 	virtual void OnPossess(APawn* InPawn) override;
+	void SetActorValueIntoBlackboard(const FName& KeyName, AActor* Actor);
 
 private:
 	const FName& TargetActorName = TEXT("TargetActor");
@@ -23,7 +24,5 @@ private:
 
 	UPROPERTY()
 	UBlackboardComponent* BBC;
-
-	FBlackboard::FKey TargetActor;
 	
 };

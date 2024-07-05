@@ -21,9 +21,13 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 	}
 
 	BBC->InitializeBlackboard(*Enemy->BehaviorTreeAsset->BlackboardAsset);
-	TargetActor = BBC->GetKeyID(TargetActorName);
 
 	RunBehaviorTree(Enemy->BehaviorTreeAsset);
 
 	BTC->StartTree(*Enemy->BehaviorTreeAsset);
+}
+
+void AEnemyAIController::SetActorValueIntoBlackboard(const FName& KeyName, AActor* Value)
+{
+	BBC->SetValueAsObject(KeyName, Value);
 }

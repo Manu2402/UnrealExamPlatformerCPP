@@ -19,9 +19,13 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
+	bool GetIsActive() const;
+	void SetIsActive(bool bValue);
+
 private:
 	const TCHAR* CubeMeshPath = TEXT("/Engine/BasicShapes/Cube.Cube");
 	const TCHAR* GrayMaterialPath = TEXT("/Game/Custom/Materials/M_Gray.M_Gray");
+	const FString& JumpscareCuePath = TEXT("/Game/Custom/Sounds/SC_Jumpscare.SC_Jumpscare");
 
 	const FVector& TriggerExtendParams = FVector(40, 40, 10);
 	const FVector& TriggerLocation = FVector(0, 0, 10);
@@ -48,5 +52,6 @@ private:
 		bool bFromSweep, const FHitResult& SweepResult);
 
 	void ToggleScore(const int32& Score);
+	void MakeNoise() const;
 
 };

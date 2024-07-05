@@ -6,6 +6,10 @@
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 #include "Utility/Subsystems/PlatformerGameInstance.h"
 #include "Utility/Subsystems/TubeManagerSubsystem.h"
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISenseConfig_Sight.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "AI/EnemyAIController.h"
 
 AEnemy::AEnemy()
 {
@@ -24,6 +28,21 @@ AEnemy::AEnemy()
 		DamageCollider->bHiddenInGame = false;
 	}
 
+	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
+
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("AIPerceptionSight"));
+	SightConfig->SightRadius = 250;
+	SightConfig->LoseSightRadius = 350;
+	SightConfig->PeripheralVisionAngleDegrees = 90;
+	SightConfig->SetMaxAge(2);
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+
+	AIPerceptionComponent->ConfigureSense(*SightConfig);
+	AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
+
+	AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &AEnemy::OnPerceptionUpdated);
 }
 
 void AEnemy::BeginPlay()
@@ -33,6 +52,8 @@ void AEnemy::BeginPlay()
 	World = GetWorld();
 	PlatformerGameInstance = Cast<UPlatformerGameInstance>(UGameplayStatics::GetGameInstance(World));
 	TubeManager = PlatformerGameInstance->GetSubsystem<UTubeManagerSubsystem>();
+
+	EnemyAIController = Cast<AEnemyAIController>(GetController());
 }
 
 void AEnemy::Tick(float DeltaTime)
@@ -45,6 +66,40 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AEnemy::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
+{
+	for (AActor* Actor : UpdatedActors)
+	{
+		FActorPerceptionBlueprintInfo Info;
+		AIPerceptionComponent->GetActorsPerception(Actor, Info);
+
+		if (!(Info.LastSensedStimuli.Num() > 0))
+		{
+			return;
+		}
+
+		for (const FAIStimulus& Stimulus : Info.LastSensedStimuli)
+		{
+			if (!Stimulus.Type == UAISense::GetSenseID<UAISense_Sight>())
+			{
+				return;
+			}
+
+			if (Stimulus.WasSuccessfullySensed())
+			{
+				EnemyAIController->SetActorValueIntoBlackboard(TargetActorName, Actor);
+				UE_LOG(LogTemp, Warning, TEXT("Player seen"));
+				return;
+			}
+			else
+			{
+				EnemyAIController->SetActorValueIntoBlackboard(TargetActorName, nullptr);
+				UE_LOG(LogTemp, Warning, TEXT("Player lost"));
+			}
+		}
+	}
 }
 
 void AEnemy::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -64,6 +119,11 @@ void AEnemy::EnableEnemy(const bool bValue)
 	SetActorHiddenInGame(!bValue);
 	SetActorEnableCollision(bValue);
 	SetActorTickEnabled(bValue);
+}
+
+void AEnemy::SetMaxWalkSpeed(const float& NewMaxWalkSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = NewMaxWalkSpeed;
 }
 
 bool AEnemy::GetEnemyIsActive() const

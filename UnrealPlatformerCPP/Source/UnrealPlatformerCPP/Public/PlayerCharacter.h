@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "EnhancedInput")
 	UDataAsset_IA* DataAsset_IA; // Database composed by input action assets.
 
+	UPROPERTY(VisibleAnywhere, Category = "AI")
+	class UAIPerceptionStimuliSourceComponent* PerceptionStimuliSource;
+
 private:
 	const FVector& CameraOffset = FVector(-660, 0, 60);
 	const FVector& MovementCheckBoxExtents = FVector(32, 32, 80);

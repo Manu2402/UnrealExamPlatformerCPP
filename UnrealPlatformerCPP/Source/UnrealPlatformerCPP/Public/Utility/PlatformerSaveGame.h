@@ -28,6 +28,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = Basic)
 	bool bIsEnemyActive;
+
+	UPROPERTY(VisibleAnywhere, Category = Basic)
+	bool bIsPlatformActive;
 };
 
 UCLASS()
