@@ -40,7 +40,7 @@ public:
 	void SetBestScoreOnUI(const int32& Score) const;
 
 	float GetPPWeight() const;
-	void SetPPWeight(float Weight);
+	void SetPPWeight(const float& Weight);
 
 	void SetPostProcessingEffectByWeight(const float& Weight);
 

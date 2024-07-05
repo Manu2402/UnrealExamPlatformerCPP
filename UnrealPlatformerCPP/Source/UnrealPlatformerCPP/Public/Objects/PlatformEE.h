@@ -20,18 +20,19 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	bool GetIsActive() const;
-	void SetIsActive(bool bValue);
+	void SetIsActive(const bool& bValue);
 
 private:
+	// References.
 	const TCHAR* CubeMeshPath = TEXT("/Engine/BasicShapes/Cube.Cube");
 	const TCHAR* GrayMaterialPath = TEXT("/Game/Custom/Materials/M_Gray.M_Gray");
 	const FString& JumpscareCuePath = TEXT("/Game/Custom/Sounds/SC_Jumpscare.SC_Jumpscare");
 
 	const FVector& TriggerExtendParams = FVector(40, 40, 10);
 	const FVector& TriggerLocation = FVector(0, 0, 10);
-	const FVector& MeshScaleParams = FVector(1, 1, 0.08);
+	const FVector& MeshScaleParams = FVector(1, 1, 0.08f);
 	
-	const int32 PlatformEEScore = 666; // EE = Easter Egg.
+	const int32& PlatformEEScore = 666; // EE = Easter Egg.
 
 	UWorld* World;
 	ULevel* CurrentLevel;

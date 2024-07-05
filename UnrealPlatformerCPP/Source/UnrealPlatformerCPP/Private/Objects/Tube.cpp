@@ -41,12 +41,12 @@ void ATube::Tick(float DeltaTime)
 
 }
 
-void ATube::SetActive(const bool Value)
+void ATube::SetActive(const bool& Value)
 {
 	bIsActive = Value;
 }
 
-void ATube::SetEnable(const bool Value)
+void ATube::SetEnable(const bool& Value)
 {
 	if (!bIsActive)
 	{

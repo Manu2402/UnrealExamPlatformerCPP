@@ -25,6 +25,6 @@ public:
 	TArray<FVector> GetSplinePoints() const;
 
 	UFUNCTION()
-	FVector GetSplinePointAtIndex(const int32 Index) const;
+	FVector GetSplinePointAtIndex(const int32& Index) const;
 
 };

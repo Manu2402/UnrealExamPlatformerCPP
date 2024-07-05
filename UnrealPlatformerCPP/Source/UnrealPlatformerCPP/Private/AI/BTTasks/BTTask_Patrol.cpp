@@ -12,6 +12,7 @@ UBTTask_Patrol::UBTTask_Patrol()
 	NodeName = TEXT("Patrol");
 }
 
+/* Same as Chase task, but the target is the current point about the smart path. */
 EBTNodeResult::Type UBTTask_Patrol::ExecuteTask(UBehaviorTreeComponent& OwnerComponent, uint8* NodeMemory)
 {
 	UBlackboardComponent* BlackboardComponent = OwnerComponent.GetBlackboardComponent();
@@ -55,12 +56,11 @@ void UBTTask_Patrol::TickTask(UBehaviorTreeComponent& OwnerComponent, uint8* Nod
 
 	FVector PatrolLocation = BlackboardComponent->GetValueAsVector(TargetPatrolLocationName);
 
-	if (HasReachedTarget(Enemy, PatrolLocation, 100))
+	if (HasReachedTarget(Enemy, PatrolLocation, AcceptanceRadius))
 	{
 		FinishLatentTask(OwnerComponent, EBTNodeResult::Succeeded);
 		return;
 	}
-
 }
 
 bool UBTTask_Patrol::HasReachedTarget(const AEnemy* Enemy, const FVector& PatrolLocation, const float& AcceptanceRadiusParam)

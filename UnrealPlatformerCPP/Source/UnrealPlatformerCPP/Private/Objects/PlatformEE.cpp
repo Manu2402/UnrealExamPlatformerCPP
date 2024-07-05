@@ -65,7 +65,7 @@ bool APlatformEE::GetIsActive() const
 	return bIsActive;
 }
 
-void APlatformEE::SetIsActive(bool bValue)
+void APlatformEE::SetIsActive(const bool& bValue)
 {
 	bIsActive = bValue;
 }
@@ -113,6 +113,7 @@ void APlatformEE::ToggleScore(const int32& Score)
 
 void APlatformEE::MakeNoise() const
 {
+	// Creepy sound.
 	FSoftObjectPath SoundAssetPath(JumpscareCuePath);
 	USoundBase* JumpscareSound = Cast<USoundBase>(SoundAssetPath.TryLoad());
 	if (!JumpscareSound)

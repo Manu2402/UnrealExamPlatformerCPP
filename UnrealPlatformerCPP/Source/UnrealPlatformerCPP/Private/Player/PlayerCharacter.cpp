@@ -8,8 +8,8 @@
 #include "Utility/PlatformerGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PlayerCharacterState.h"
-#include "AI/Enemy.h"
 #include "Perception/AISense_Sight.h"
+#include "AI/Enemy.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -51,6 +51,7 @@ APlayerCharacter::APlayerCharacter()
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnCapsuleHit);
 
+	// Register sight sense to be sighted by the enemy.
 	PerceptionStimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSourceComponent"));
 	PerceptionStimuliSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 	PerceptionStimuliSource->RegisterWithPerceptionSystem();

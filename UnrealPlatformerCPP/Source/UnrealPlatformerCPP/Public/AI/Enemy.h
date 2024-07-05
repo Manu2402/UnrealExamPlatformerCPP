@@ -36,17 +36,17 @@ public:
 
 	void ToggleScore(const int32& Score);
 	bool GetEnemyIsActive() const;
-	void SetEnemyIsActive(bool bisEnemyActive);
+	void SetEnemyIsActive(const bool& bisEnemyActive);
 	void SetMaxWalkSpeed(const float& NewMaxWalkSpeed);
 
 private:
 	const TCHAR* SkeletalMeshPath = TEXT("/Game/Characters/Mannequin_UE4/Meshes/SK_Mannequin.SK_Mannequin");
-	const FVector& DamageColliderExtent = FVector(5, 5, 5);
+	const FVector& DamageColliderExtent = FVector(5);
 	const FName& DamageSocketString = TEXT("DamageSocket");
 	const FName& FirstFloorQuestString = TEXT("FirstFloorQuest");
+	const FName& TargetActorName = TEXT("TargetActor");
 	const FName& PlayerTag = TEXT("Player");
 	const FName& EnemyTag = TEXT("Enemy");
-	const FName& TargetActorName = TEXT("TargetActor");
 	
 	bool bIsActive = true;
 
@@ -72,6 +72,6 @@ private:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 		bool bFromSweep, const FHitResult& SweepResult);
 
-	void EnableEnemy(const bool bValue);
+	void EnableEnemy(const bool& bValue);
 
 };

@@ -2,6 +2,9 @@
 #include "Kismet/GameplayStatics.h"
 #include "Objects/Tube.h"
 
+/* This class handle all the tubes in the game. Cause in this game the tubes are as teleports, and 
+they can be enabled/disabled. All is handled even to the save game info. */
+
 TMap<ATube*, bool> UTubeManagerSubsystem::GetTubesState() const
 {
 	if (TubesState.IsEmpty())
@@ -48,7 +51,7 @@ TArray<ATube*> UTubeManagerSubsystem::GetAllTubes()
 	return Tubes;
 }
 
-void UTubeManagerSubsystem::ToggleTubeQuestState(const FName& TubeQuestStateString, const bool bState)
+void UTubeManagerSubsystem::ToggleTubeQuestState(const FName& TubeQuestStateString, const bool& bState)
 {
 	GetAllTubes();
 	for (ATube* Tube : Tubes)

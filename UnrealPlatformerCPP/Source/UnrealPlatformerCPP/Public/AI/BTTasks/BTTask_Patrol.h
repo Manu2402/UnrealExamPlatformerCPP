@@ -18,7 +18,7 @@ public:
 private:
 	const FName& TargetPatrolLocationName = TEXT("TargetPatrolLocation");
 	const FName& TargetActorName = TEXT("TargetActor");
-	const float& AcceptanceRadius = 100.f;
+	const float& AcceptanceRadius = 100;
 
 	bool HasReachedTarget(const class AEnemy* Enemy, const FVector& PatrolLocation, const float& AcceptanceRadius);
 };

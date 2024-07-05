@@ -18,14 +18,15 @@ protected:
 public:	
 	virtual void Tick(float DeltaTime) override;
 
-	void SetActive(const bool Value);
-	void SetEnable(const bool Value);
+	void SetActive(const bool& Value);
+	void SetEnable(const bool& Value);
 
 private:
 	const TCHAR* TubeMeshPath = TEXT("/Game/Custom/Meshes/Tube/Tube.Tube");
 
 	const FVector& TriggerExtendParams = FVector(45, 45, 32);
 	const FVector& TriggerPosition = FVector(0, 0, -36);
+
 	const FName& PlayerTag = TEXT("Player");
 	const FName& NoCollisionPreset = TEXT("NoCollision");
 

@@ -19,14 +19,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	// Materials.
 	const TCHAR* CheckpointMeshPath = TEXT("/Game/Custom/Meshes/Flags/Checkpoint_Flag/Checkpoint_Flag.Checkpoint_Flag");
 	const TCHAR* GreenMaterialPath = TEXT("/Game/Custom/Materials/M_Green.M_Green");
 	const TCHAR* RedMaterialPath = TEXT("/Game/Custom/Materials/M_Red.M_Red");
 
-	const FVector& TriggerExtendParams = FVector(32, 32, 32);
+	const FVector& TriggerExtendParams = FVector(32);
 	const FVector& FlagMeshLocation = FVector(0, -80, -30);
 	const FRotator& FlagMeshRotation = FRotator(0, 0, 90);
-	const FVector& FlagMeshScale = FVector(0.6);
+	const FVector& FlagMeshScale = FVector(0.6f);
 
 	bool bCurrentState;
 

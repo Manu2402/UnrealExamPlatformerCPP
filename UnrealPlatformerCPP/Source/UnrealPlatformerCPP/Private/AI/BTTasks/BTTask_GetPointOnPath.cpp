@@ -2,16 +2,17 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h" 
 #include "BehaviorTree/Blackboard/BlackboardKeyType_Vector.h"
-#include "BehaviorTree/Blackboard/BlackboardKeyType_Object.h"
 #include "AI/Enemy.h"
 #include "Utility/SmartPath.h"
 
 UBTTask_GetPointOnPath::UBTTask_GetPointOnPath()
 {
 	bCreateNodeInstance = true;
-	NodeName = TEXT("Get Next Point on Path");
+	NodeName = TEXT("Get Next Point On Path");
 }
 
+/* I use a spline in order to create a path composed by flexable points. With this points i update the
+blackboard with the current point position for the path. */
 EBTNodeResult::Type UBTTask_GetPointOnPath::ExecuteTask(UBehaviorTreeComponent& OwnerComponent, uint8* NodeMemory)
 {
 	UBlackboardComponent* BlackboardComponent = OwnerComponent.GetBlackboardComponent();
@@ -26,14 +27,7 @@ EBTNodeResult::Type UBTTask_GetPointOnPath::ExecuteTask(UBehaviorTreeComponent& 
 	TArray<FVector> PatrolPoints = Enemy->PawnPath->GetSplinePoints();
 	BlackboardComponent->SetValue<UBlackboardKeyType_Vector>(TargetPatrolLocationName, PatrolPoints[PointIndex]);
 
-	if (PointIndex < PatrolPoints.Num() - 1)
-	{
-		PointIndex++;
-	}
-	else
-	{
-		PointIndex = 0;
-	}
+	PointIndex = (PointIndex + 1) % PatrolPoints.Num();
 
 	FinishLatentTask(OwnerComponent, EBTNodeResult::Succeeded);
 	return EBTNodeResult::Succeeded;

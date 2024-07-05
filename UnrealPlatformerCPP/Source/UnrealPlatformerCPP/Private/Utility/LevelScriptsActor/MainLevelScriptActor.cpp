@@ -80,7 +80,7 @@ float AMainLevelScriptActor::GetPPWeight() const
 	return PPWeight;
 }
 
-void AMainLevelScriptActor::SetPPWeight(float Weight)
+void AMainLevelScriptActor::SetPPWeight(const float& Weight)
 {
 	// Post processing weight, clamped between 0 and 1.
 	PPWeight = FMath::Clamp(Weight, 0.f, 1.f);

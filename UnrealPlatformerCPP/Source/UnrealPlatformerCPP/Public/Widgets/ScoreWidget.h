@@ -13,8 +13,8 @@ protected:
 	virtual void NativeConstruct() override;
 
 public:
-	void SetScore(const int32 Score);
-	void SetBestScore(const int32 Score);
+	void SetScore(const int32& Score);
+	void SetBestScore(const int32& Score);
 
 private:
 	UWorld* World = GetWorld();

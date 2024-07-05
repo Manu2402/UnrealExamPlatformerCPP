@@ -37,7 +37,7 @@ TArray<FVector> ASmartPath::GetSplinePoints() const
 	return OutPoints;
 }
 
-FVector ASmartPath::GetSplinePointAtIndex(const int32 Index) const
+FVector ASmartPath::GetSplinePointAtIndex(const int32& Index) const
 {
 	return SplineComponent->GetLocationAtSplinePoint(Index, ESplineCoordinateSpace::World);
 }

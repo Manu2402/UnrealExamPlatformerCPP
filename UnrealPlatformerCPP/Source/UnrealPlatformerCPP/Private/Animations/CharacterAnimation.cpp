@@ -2,6 +2,10 @@
 #include "Player/PlayerCharacter.h"
 #include "Player/PlayerMovementComponent.h"
 
+/* In this class i managed all the variabiles bound to the anim graph, and i applied this class as the
+parent class of the animation bluprints that i used to animate both enemy and player. For the movement
+i used the custom movement component on the player. */
+
 void UCharacterAnimation::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
@@ -13,7 +17,6 @@ void UCharacterAnimation::NativeInitializeAnimation()
 	}
 
 	MovementComponent = Character->PlayerMovementComponent;
-
 }
 
 void UCharacterAnimation::NativeUpdateAnimation(float DeltaSeconds)

@@ -9,6 +9,8 @@
 #include "Objects/PlatformEE.h"
 #include "AI/Enemy.h"
 
+// This class manage all save systems.
+
 bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, int32 UserIndex)
 {
 	PlatformerSaveGame = Cast<UPlatformerSaveGame>(UGameplayStatics::CreateSaveGameObject(UPlatformerSaveGame::StaticClass()));

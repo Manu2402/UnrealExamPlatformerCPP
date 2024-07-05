@@ -19,6 +19,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	// Materials.
 	const TCHAR* FlagPoleMeshPath = TEXT("/Game/Custom/Meshes/Flags/FlagPole/SM_FlagPole.SM_FlagPole");
 	const TCHAR* MaterialPath = TEXT("/Game/Custom/Meshes/Flags/FlagPole/Material.Material");
 	const TCHAR* PipeMaterialPath = TEXT("/Game/Custom/Meshes/Flags/FlagPole/Pipe.Pipe");
@@ -26,11 +27,12 @@ private:
 	const TCHAR* FlagMaterialPath = TEXT("/Game/Custom/Meshes/Flags/FlagPole/Flag.Flag");
 	const TCHAR* BrickMaterialPath = TEXT("/Game/Custom/Meshes/Flags/FlagPole/Brick.Brick");
 
-	const FVector& TriggerExtendParams = FVector(32, 32, 32);
+	const FVector& TriggerExtendParams = FVector(32);
 	const FVector& FlagMeshLocation = FVector(0, -80, -30);
 	const FVector& FlagMeshScale = FVector(0.6f);
 	const FName& SlotsLevelName = TEXT("SlotsLevel");
 
+	// I used a map to simplify the operations where i applied all materials to the flag.
 	TMap<uint32, const TCHAR*> FlagPoleMaterials;
 
 	UPROPERTY(EditAnywhere)

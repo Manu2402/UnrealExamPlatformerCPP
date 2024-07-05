@@ -12,6 +12,8 @@ UBTTask_Chase::UBTTask_Chase()
 	NodeName = TEXT("Chase");
 }
 
+/* Getting target location, where target is the player, and move towards it. Repeated even in tick task,
+otherwise the method ends chase task at the first frame. */
 EBTNodeResult::Type UBTTask_Chase::ExecuteTask(UBehaviorTreeComponent& OwnerComponent, uint8* NodeMemory)
 {
 	UBlackboardComponent* BlackboardComponent = OwnerComponent.GetBlackboardComponent();
@@ -87,7 +89,7 @@ void UBTTask_Chase::TickTask(UBehaviorTreeComponent& OwnerComponent, uint8* Node
 		return;
 	}
 
-	if (HasReachedTarget(Enemy, TargetActorLocation, 100))
+	if (HasReachedTarget(Enemy, TargetActorLocation, AcceptanceRadius))
 	{
 		FinishLatentTask(OwnerComponent, EBTNodeResult::Succeeded);
 		return;

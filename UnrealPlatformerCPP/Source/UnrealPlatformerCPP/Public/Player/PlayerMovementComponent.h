@@ -22,7 +22,7 @@ class UNREALPLATFORMERCPP_API UPlayerMovementComponent : public UMovementCompone
 private:
 	const FVector& Gravity = FVector(0, 0, -9.81f);
 	const FVector& DefaultSphereOffset = FVector(0, 0, -90);
-	const FQuat& OffsetRotation = FQuat(FRotator(0.f, 180.f, 0.f));
+	const FQuat& OffsetRotation = FQuat(FRotator(0, 180, 0));
 	const float& DefaultSphereRadius = 15;
 	const float& ZScaleMax = 30;
 	const float& HitNormalValue = 0.8f;
@@ -60,5 +60,5 @@ public:
 	void PlayerJump();
 	void PlayerMove(const struct FInputActionValue& Input);
 
-	void AbilityToMoveOnY(bool Value);
+	void AbilityToMoveOnY(const bool& bValue);
 };

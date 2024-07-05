@@ -5,7 +5,7 @@
 
 UPlayerMovementComponent::UPlayerMovementComponent()
 {
-	PlayerJumpForce = 600;
+	PlayerJumpForce = 600; // Hard coded but c'est la vie.
 	MovementSpeed = 400;
 }
 
@@ -141,8 +141,8 @@ void UPlayerMovementComponent::PlayerMove(const FInputActionValue& Input)
 	bPreviousSign = bCurrentSign;
 }
 
-void UPlayerMovementComponent::AbilityToMoveOnY(bool Value)
+void UPlayerMovementComponent::AbilityToMoveOnY(const bool& bValue)
 {
-	bCanMoveOnYAxisForward = Value;
-	bCanMoveOnYAxisBackward = Value;
+	bCanMoveOnYAxisForward = bValue;
+	bCanMoveOnYAxisBackward = bValue;
 }

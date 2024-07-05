@@ -77,6 +77,7 @@ void ACheckpoint::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* Ot
 	ToggleFlagState(false);
 }
 
+// Toggle color on the flag. When you take a checkpoint, all taken checkpoints are going to enable.
 void ACheckpoint::ToggleFlagState(const bool bState)
 {
 	bCurrentState = bState;

@@ -21,7 +21,7 @@ private:
 public:
 	virtual void BeginPlay() override;
 
-	class TSubclassOf<UUserWidget> SlotsWidgetClass = LoadClass<class USlotsWidget>(nullptr, TEXT("/Game/Custom/Widgets/WBP_ScoreWidget.WBP_ScoreWidget_C"));
+	class TSubclassOf<UUserWidget> SlotsWidgetClass;
 	class USlotsWidget* SlotsWidgetInstance;
 
 	void InitSlotsWidget();

@@ -19,7 +19,7 @@ public:
 	void SetTubesState(const TMap<class ATube*, bool>& NewTubesState);
 
 	TArray<class ATube*> GetAllTubes();
-	void ToggleTubeQuestState(const FName& TubeQuestStateName, const bool bState);
+	void ToggleTubeQuestState(const FName& TubeQuestStateName, const bool& bState);
 	void ClearTubesState();
 	
 };

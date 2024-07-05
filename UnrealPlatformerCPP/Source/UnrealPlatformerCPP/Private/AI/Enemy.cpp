@@ -24,14 +24,13 @@ AEnemy::AEnemy()
 		DamageCollider->SetupAttachment(GetMesh(), DamageSocketString);
 		DamageCollider->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnBoxTriggered);
 		DamageCollider->SetBoxExtent(DamageColliderExtent);
-
-		DamageCollider->bHiddenInGame = false;
 	}
 
+	// Perception in order to apply the sight on the enemy.
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("AIPerceptionSight"));
-	SightConfig->SightRadius = 250;
+	SightConfig->SightRadius = 250; // Hard coded but c'est la vie.
 	SightConfig->LoseSightRadius = 350;
 	SightConfig->PeripheralVisionAngleDegrees = 90;
 	SightConfig->SetMaxAge(2);
@@ -87,16 +86,16 @@ void AEnemy::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 				return;
 			}
 
+			/* Set into the blackboard the target, and with this i used a decorator in the behavior tree
+			to manage the enter conditions in the chase state. */
 			if (Stimulus.WasSuccessfullySensed())
 			{
 				EnemyAIController->SetActorValueIntoBlackboard(TargetActorName, Actor);
-				UE_LOG(LogTemp, Warning, TEXT("Player seen"));
 				return;
 			}
 			else
 			{
 				EnemyAIController->SetActorValueIntoBlackboard(TargetActorName, nullptr);
-				UE_LOG(LogTemp, Warning, TEXT("Player lost"));
 			}
 		}
 	}
@@ -114,7 +113,7 @@ void AEnemy::OnBoxTriggered(UPrimitiveComponent* OverlappedComp, AActor* OtherAc
 	TubeManager->ToggleTubeQuestState(FirstFloorQuestString, !bIsActive);
 }
 
-void AEnemy::EnableEnemy(const bool bValue)
+void AEnemy::EnableEnemy(const bool& bValue)
 {
 	SetActorHiddenInGame(!bValue);
 	SetActorEnableCollision(bValue);
@@ -131,7 +130,7 @@ bool AEnemy::GetEnemyIsActive() const
 	return bIsActive;
 }
 
-void AEnemy::SetEnemyIsActive(bool bIsEnemyActive)
+void AEnemy::SetEnemyIsActive(const bool& bIsEnemyActive)
 {
 	bIsActive = bIsEnemyActive;
 	EnableEnemy(bIsActive);

@@ -2,6 +2,8 @@
 #include "AI/Enemy.h"
 #include "GameFramework/PawnMovementComponent.h"
 
+/* Same as character animation class, but using the standard movement component. */
+
 void UEnemyAnimation::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();

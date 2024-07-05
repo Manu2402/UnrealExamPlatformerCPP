@@ -15,12 +15,12 @@ void UScoreWidget::NativeConstruct()
 	SetBestScore(PlayerCharacterState->GetBestScore());
 }
 
-void UScoreWidget::SetScore(const int32 Score)
+void UScoreWidget::SetScore(const int32& Score)
 {
 	ScoreText->SetText(FText::FromString(FString::FromInt(Score)));
 }
 
-void UScoreWidget::SetBestScore(const int32 Score)
+void UScoreWidget::SetBestScore(const int32& Score)
 {
 	if (Score < 0)
 	{

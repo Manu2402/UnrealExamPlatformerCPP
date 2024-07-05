@@ -20,6 +20,7 @@ void AEnemyAIController::OnPossess(APawn* InPawn)
 		return;
 	}
 
+	// Init AI tools.
 	BBC->InitializeBlackboard(*Enemy->BehaviorTreeAsset->BlackboardAsset);
 
 	RunBehaviorTree(Enemy->BehaviorTreeAsset);
