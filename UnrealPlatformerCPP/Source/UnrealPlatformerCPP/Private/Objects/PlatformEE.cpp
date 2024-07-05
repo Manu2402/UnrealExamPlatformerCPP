@@ -1,8 +1,8 @@
-#include "PlatformEE.h"
+#include "Objects/PlatformEE.h"
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PlayerCharacterState.h"
+#include "Player/PlayerCharacterState.h"
 
 APlatformEE::APlatformEE()
 {

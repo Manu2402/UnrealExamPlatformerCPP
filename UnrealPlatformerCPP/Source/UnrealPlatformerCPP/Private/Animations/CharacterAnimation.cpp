@@ -1,6 +1,6 @@
 #include "Animations/CharacterAnimation.h"
-#include "PlayerCharacter.h"
-#include "PlayerMovementComponent.h"
+#include "Player/PlayerCharacter.h"
+#include "Player/PlayerMovementComponent.h"
 
 void UCharacterAnimation::NativeInitializeAnimation()
 {

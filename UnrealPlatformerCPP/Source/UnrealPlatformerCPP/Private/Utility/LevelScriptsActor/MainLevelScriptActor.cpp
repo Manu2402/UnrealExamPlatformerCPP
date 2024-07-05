@@ -1,11 +1,11 @@
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
-#include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Utility/PlatformerGameInstance.h"
 #include "Utility/Subsystems/TubeManagerSubsystem.h"
-#include "PlayerCharacterController.h"
+#include "Player/PlayerCharacterController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
 #include "Widgets/ScoreWidget.h"
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 
 void AMainLevelScriptActor::BeginPlay()
 {

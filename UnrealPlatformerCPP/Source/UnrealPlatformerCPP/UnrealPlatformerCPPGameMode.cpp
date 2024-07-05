@@ -1,8 +1,8 @@
 #include "UnrealPlatformerCPPGameMode.h"
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 // Header wrotes in this way before the tip gave from professor about separate "Private and Public" files.
-#include "Public/PlayerCharacterController.h"
-#include "PlayerCharacterState.h"
+#include "Public/Player/PlayerCharacterController.h"
+#include "Player/PlayerCharacterState.h"
 
 AUnrealPlatformerCPPGameMode::AUnrealPlatformerCPPGameMode()
 {

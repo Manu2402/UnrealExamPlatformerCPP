@@ -1,12 +1,12 @@
-#include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Utility/PlatformerGameInstance.h"
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
 #include "Utility/Subsystems/TubeManagerSubsystem.h"
-#include "Utility/PlatformerSaveGame.h"
-#include "Utility/BestScoreSaveGame.h"
+#include "Utility/SaveGames/PlatformerSaveGame.h"
+#include "Utility/SaveGames/BestScoreSaveGame.h"
 #include "Kismet/GameplayStatics.h"
-#include "PlayerCharacterState.h"
-#include "PlayerCharacter.h"
-#include "PlatformEE.h"
+#include "Player/PlayerCharacterState.h"
+#include "Player/PlayerCharacter.h"
+#include "Objects/PlatformEE.h"
 #include "AI/Enemy.h"
 
 bool UPlatformerGameInstance::SaveGame(UWorld* World, const FString& SlotName, int32 UserIndex)

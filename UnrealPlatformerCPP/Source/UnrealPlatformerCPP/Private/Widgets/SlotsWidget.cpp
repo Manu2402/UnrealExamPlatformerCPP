@@ -1,7 +1,7 @@
 #include "Widgets/SlotsWidget.h"
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
-#include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Utility/PlatformerGameInstance.h"
 
 void USlotsWidget::NativeConstruct()
 {

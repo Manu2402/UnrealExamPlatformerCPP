@@ -1,9 +1,9 @@
-#include "Utility/FlagPole.h"
+#include "Objects/FlagPole.h"
 #include "Utility/LevelScriptsActor/MainLevelScriptActor.h"
-#include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Utility/PlatformerGameInstance.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "PlayerCharacterState.h"
+#include "Player/PlayerCharacterState.h"
 
 AFlagPole::AFlagPole()
 {

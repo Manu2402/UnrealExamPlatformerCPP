@@ -1,5 +1,5 @@
 // Header wrotes in this way before the tip gave from professor about separate "Private and Public" files.
-#include "../Public/PlayerMovementComponent.h"
+#include "../Public/Player/PlayerMovementComponent.h"
 
 #include "EnhancedInputComponent.h"
 

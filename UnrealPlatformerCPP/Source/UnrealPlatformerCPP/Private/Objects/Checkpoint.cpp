@@ -1,6 +1,6 @@
-#include "Utility/Checkpoint.h"
+#include "Objects/Checkpoint.h"
 #include "Components/BoxComponent.h"
-#include "Utility/Subsystems/PlatformerGameInstance.h"
+#include "Utility/PlatformerGameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/SkeletalMeshComponent.h"
 

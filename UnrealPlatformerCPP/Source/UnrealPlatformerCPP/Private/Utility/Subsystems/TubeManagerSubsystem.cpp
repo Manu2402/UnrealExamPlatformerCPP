@@ -1,6 +1,6 @@
 #include "Utility/Subsystems/TubeManagerSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "Tube.h"
+#include "Objects/Tube.h"
 
 TMap<ATube*, bool> UTubeManagerSubsystem::GetTubesState() const
 {

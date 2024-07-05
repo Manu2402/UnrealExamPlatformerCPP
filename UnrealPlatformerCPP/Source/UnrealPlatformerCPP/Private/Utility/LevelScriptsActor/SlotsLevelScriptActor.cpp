@@ -1,5 +1,5 @@
 #include "Utility/LevelScriptsActor/SlotsLevelScriptActor.h"
-#include "PlayerCharacterController.h"
+#include "Player/PlayerCharacterController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Widgets/SlotsWidget.h"
 

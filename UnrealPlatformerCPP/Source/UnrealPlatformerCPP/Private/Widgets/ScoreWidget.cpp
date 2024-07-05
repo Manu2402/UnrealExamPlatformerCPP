@@ -1,6 +1,6 @@
 #include "Widgets/ScoreWidget.h"
 #include "Components/TextBlock.h"
-#include "PlayerCharacterState.h"
+#include "Player/PlayerCharacterState.h"
 #include "Kismet/GameplayStatics.h"
 
 void UScoreWidget::NativeConstruct()
