@@ -1,5 +1,7 @@
 # UnrealExamPlatformerCPP
-Technical demo about a "platformer like" game developed in Unreal Engine 5 mainly via C++.
+- Technical demo about a "platformer like" game developed in Unreal Engine 5 mainly via C++.
+- Exam project to test knowledge of Unreal C++ gameplay at the end of the second year of the Video Game Programming course at AIV (Accademia Italiana dei Videogiochi)
+
 ## Game description
 - The game consists to climb a tower composed by a lot of floors, where every main floors have a quest to complete in order to going up.
 - Goes up to the tower  is possible by "Super Mario" pipes, that works as teleports, and in the main floors the pipe that brings you up will be locked while you complete the quest of the current floor.
